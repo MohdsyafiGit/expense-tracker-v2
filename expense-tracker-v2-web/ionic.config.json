@@ -1,0 +1,7 @@
+{
+  "name": "expense-tracker-v2-web",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
