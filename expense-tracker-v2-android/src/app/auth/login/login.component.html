@@ -1,0 +1,25 @@
+<ion-content color="primary">
+  <div class="sign-in-content">
+    <ion-card color="secondary" class="ion-padding">
+      <ion-card-header>
+        <ion-title class="ion-text-center">Expense Tracker</ion-title>
+      </ion-card-header>
+      <ion-button shape="round" color="tertiary" expand="full" (click)="handleGoogleClick()"> 
+        <span style="padding-top: 3px; padding-right: 4px;">Google {{buttonLabel}}</span> 
+        <ion-icon name="logo-google"></ion-icon> 
+      </ion-button>
+    </ion-card>
+  </div>
+
+  <ion-alert
+    class="warning-alert"
+    color="secondary"
+    [isOpen]="isAlertOpen"
+    header="Warning"
+    [message]="alertMsg"
+    (didDismiss)="setOpen(false)"
+    [buttons]="alertButtons">
+  </ion-alert>
+
+</ion-content>
+

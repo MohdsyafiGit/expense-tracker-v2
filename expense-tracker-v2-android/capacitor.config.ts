@@ -1,13 +1,18 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'expense.tracker.v2',
   appName: 'expense-tracker-v2-android',
   webDir: '../dist/expense-tracker-v2-android/browser',
-  bundledWebRuntime: false,
   server: {
     androidScheme: 'https',
   },
+  "plugins": {
+    "FirebaseAuthentication": {
+      "skipNativeAuth": false,
+      "providers": ["google.com"]
+    }
+  }
 };
 
 export default config;

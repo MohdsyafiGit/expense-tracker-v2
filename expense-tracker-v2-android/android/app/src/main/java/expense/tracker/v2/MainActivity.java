@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package expense.tracker.v2;
 
 import com.getcapacitor.BridgeActivity;
 

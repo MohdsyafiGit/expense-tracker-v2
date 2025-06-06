@@ -7,7 +7,7 @@ import {
   IonLabel,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { triangle, ellipse, square } from 'ionicons/icons';
+import { cashOutline, homeOutline, settingsOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-tabs',
@@ -16,10 +16,10 @@ import { triangle, ellipse, square } from 'ionicons/icons';
   standalone: true,
   imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
 })
-export class TabsPage {
+export class TabsComponent {
   public environmentInjector = inject(EnvironmentInjector);
 
   constructor() {
-    addIcons({ triangle, ellipse, square });
+    addIcons({ cashOutline, homeOutline, settingsOutline });
   }
 }
