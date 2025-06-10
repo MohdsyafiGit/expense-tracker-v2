@@ -60,4 +60,11 @@ export class AuthService {
     else
       return false;
   }
+
+  getUserId(){
+    if(this.user)
+      return this.user.uid;
+    else
+      return "";
+  }
 }

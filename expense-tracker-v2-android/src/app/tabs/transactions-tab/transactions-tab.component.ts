@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonTitle, IonToolbar, IonContent, IonHeader } from "@ionic/angular/standalone";
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-transactions-tab',
@@ -8,4 +9,7 @@ import { IonTitle, IonToolbar, IonContent, IonHeader } from "@ionic/angular/stan
   templateUrl: './transactions-tab.component.html',
   styleUrl: './transactions-tab.component.scss',
 })
-export class TransactionsTabComponent {}
+export class TransactionsTabComponent {
+  constructor(private categoryService : CategoryService){
+  }
+}

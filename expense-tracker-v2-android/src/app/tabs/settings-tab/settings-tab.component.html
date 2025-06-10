@@ -2,12 +2,31 @@
   <ion-toolbar color="secondary">
     <ion-title>Settings</ion-title>
   </ion-toolbar>
+  <ion-toolbar color="secondary">
+    <ion-segment [scrollable]="true" value="category">
+      <ion-segment-button value="category" content-id="category">
+        <ion-label>Category</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="bank" content-id="bank">
+        <ion-label>Bank</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="filter" content-id="filter">
+        <ion-label>Filter</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="template" content-id="template">
+        <ion-label>Template</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" color="primary">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Settings</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-segment-view>
+    <ion-segment-content id="category">
+      <app-category></app-category>
+    </ion-segment-content>
+    <ion-segment-content id="bank">Bank</ion-segment-content>
+    <ion-segment-content id="filter">Filter</ion-segment-content>
+    <ion-segment-content id="template">Template</ion-segment-content>
+  </ion-segment-view>
 </ion-content>

@@ -1,0 +1,26 @@
+
+<div class="button-container">
+  <ion-button fill="solid" id="new-category" color="tertiary" shape="round">
+    <ion-label>Add</ion-label>
+    <ion-icon name="add-outline" slot="end"></ion-icon>
+  </ion-button>
+</div>
+
+<ion-modal trigger="new-category">
+    <ng-template>
+      <app-add-category (cancelClick)="onCancelModal()" (confirmClick)="onConfirmModal()"></app-add-category>
+    </ng-template>
+</ion-modal>
+
+<ion-list class="ion-no-padding">
+    @for(category of (categories$ | async); let i = $index ;track i){
+      <ion-item color="primary" class="ion-activatable ripple-parent">
+        <ion-icon slot="start" [src]="getIcon(category.iconName)" size="default" [name]="category.iconName"></ion-icon>
+        <ion-label>{{category.name}}</ion-label>
+        <ion-button (click)="removeCategory(category.id)" shape="round" slot="end" color="secondary" size="default">
+          <ion-icon slot="icon-only" size="default" name="trash" color="danger"></ion-icon>
+        </ion-button>
+      </ion-item>
+    }
+</ion-list>
+

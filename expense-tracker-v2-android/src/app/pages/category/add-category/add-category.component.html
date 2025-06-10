@@ -1,0 +1,66 @@
+<ion-header >
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <h3>Add Category</h3>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" color="primary" [fullscreen]="true">
+  <form [formGroup]="addCategoryForm">
+    <ion-item color="secondary">
+      <ion-input
+        class="custom"
+        label="Category name"
+        labelPlacement="stacked"
+        type="text"
+        placeholder="Food, fuel, gym"
+        formControlName = "name"
+      ></ion-input>
+        @if(selectedIconName$ | async){
+          <ion-icon [src]="getIcon(addCategoryForm.iconNameFc?.value)" size="large" [name]="addCategoryForm.iconNameFc?.value"></ion-icon>
+        }
+    </ion-item>
+  </form>
+  <ion-item color="secondary">
+    <ion-input
+      class="custom"
+      label="search icon"
+      labelPlacement="stacked"
+      type="text"
+      placeholder="wallet, food, car"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="this.$searchTermEvent.next($event)"
+      #iconSearchInput
+    ></ion-input>
+    <ion-button (click)="handleClickShowAll()" class="show-all" color="tertiary">
+      Show All
+    </ion-button>
+  </ion-item>
+
+  @if(!isLoading){
+    <ion-grid>
+      <ion-row>
+        @for(iconName of ($iconSearchResult |async) ; let i = $index ;track i){
+          <ion-col size="4">
+            <div class="icon-container">
+              <ion-button (click)="handleIconClick(iconName)" color="tertiary">
+                <ion-icon [src]="getIcon(iconName)" size="large" [name]="iconName"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+  }
+
+  @if(isLoading){
+    <div class="loading-container">
+      <ion-spinner name="lines"></ion-spinner>
+    </div>
+  }
+
+</ion-content>

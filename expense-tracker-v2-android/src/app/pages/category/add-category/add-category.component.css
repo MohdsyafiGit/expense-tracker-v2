@@ -1,0 +1,22 @@
+ion-input.custom {
+    --highlight-color-valid: rgb(194, 197, 245);
+}
+
+.icon-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+ion-button.show-all {
+    width: 40%;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+}
+
+.loading-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
