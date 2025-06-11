@@ -1,17 +1,15 @@
-import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
 import { AddCategoryForm, Category } from '../models/category.model';
 import { Observable } from 'rxjs';
-import { FireStorePath } from './firestore.path.service';
+import { FirebasePathBuilderService } from './firebase-path-builder.service';
 import { FirebaseFirestore } from '@capacitor-firebase/firestore';
 import { Expense } from '../models/expense.model';
-import { FormControl, FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoryService {
-  constructor(private fsPath: FireStorePath,private authService : AuthService) {
+  constructor(private path: FirebasePathBuilderService) {
   }
   private categories: Category[] = [];
 
@@ -24,7 +22,7 @@ export class CategoryService {
       const setupListener = async () => {
         try {
           callbackId = await FirebaseFirestore.addCollectionSnapshotListener({
-            reference : this.fsPath.userCategoryCollectionPath(this.authService.getUserId())
+            reference : this.path.userCategoryCollectionPath()
           }, (event, error) => {
             if (error) {
               console.error(error);
@@ -59,7 +57,7 @@ export class CategoryService {
 
 	async deleteCategory(catId:string){
     const { snapshots : expensesSnapShot } = await FirebaseFirestore.getCollection<Expense>({
-      reference: this.fsPath.userExpensesCollectionPath(this.authService.getUserId()),
+      reference: this.path.userExpensesCollectionPath(),
       compositeFilter: {
         type: 'and',
         queryConstraints: [
@@ -76,7 +74,7 @@ export class CategoryService {
     if(expensesSnapShot && expensesSnapShot.length > 0){
       return "Category in use, unable to delete";
     }else{
-      const docRef = this.fsPath.userCategoryDocPath(this.authService.getUserId(),catId);
+      const docRef = this.path.userCategoryDocPath(catId);
       await FirebaseFirestore.deleteDocument({reference: docRef,});
       return ""
     }
@@ -86,7 +84,7 @@ export class CategoryService {
     const newCat = new Category(this.addCategoryForm.nameFc?.value,this.camelToKebab(this.addCategoryForm.iconNameFc?.value));
     
     await FirebaseFirestore.addDocument({
-      reference: this.fsPath.userCategoryCollectionPath(this.authService.getUserId()),
+      reference: this.path.userCategoryCollectionPath(),
       data:  <Category>{ 
         id: "",
         name: newCat.name,

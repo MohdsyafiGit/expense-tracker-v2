@@ -1,0 +1,12 @@
+<div class="bank-pic-container">
+  @if(picUrl()){
+    <div class="pic-avatar">
+      <img [src]="picUrl()" [ngClass]="size" alt="image of the bank">
+    </div>
+  }
+  @if(!picUrl()){
+    <div class="pic-avatar">
+      <ion-icon [ngClass]="size" slot="icon-only" name="image-outline"></ion-icon>
+    </div>
+  }
+</div>

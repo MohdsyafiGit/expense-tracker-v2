@@ -8,12 +8,13 @@ import { addIcons } from 'ionicons';
 import { CategoryService } from '../../../services/category.service';
 import { AddCategoryForm } from '../../../models/category.model';
 import { Dialog } from '@capacitor/dialog';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-add-category',
-  imports: [IonSpinner, IonCol, IonRow, IonGrid, IonIcon, IonInput, IonItem, IonContent, IonButton, IonButtons, IonToolbar, IonHeader, CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [IonCol, IonRow, IonGrid, IonIcon, IonInput, IonItem, IonContent, IonButton, IonButtons, IonToolbar, IonHeader, CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './add-category.component.html',
-  styleUrl: './add-category.component.css',
+  styleUrl: './add-category.component.scss',
 })
 export class AddCategoryComponent {
 
@@ -24,14 +25,13 @@ export class AddCategoryComponent {
   $searchTermEvent = new Subject<string>();
   $iconSearchResult = new BehaviorSubject<string[]>([]);
   searchTerm  = "";
-  isLoading = false;
   addCategoryForm = new AddCategoryForm();
   allIcons = Object.keys(iconList).reduce((acc, iconName) => {
     acc[iconName] = iconList[iconName as keyof typeof iconList];
     return acc;
   }, {} as { [key: string]: string });
 
-  constructor(private categoryService: CategoryService){
+  constructor(private categoryService: CategoryService,private loadingService:LoadingService){
     addIcons(this.allIcons);
     this.addCategoryForm = this.categoryService.addCategoryForm;
 
@@ -78,12 +78,14 @@ export class AddCategoryComponent {
     this.selectedIconName$.next(iconName)
   }
 
-  handleClickShowAll(){
-    this.isLoading = true;
-    setTimeout((()=>{
+  async handleClickShowAll(){
+    await this.loadingService.beginLoading();
+
+    setTimeout(async () => {
       this.$iconSearchResult.next(this.iconNames);
-      this.isLoading = false;
-    }), 2000)
+      await this.loadingService.endLoading();
+    }, 500);
+
   }
 
   handleSearch(){

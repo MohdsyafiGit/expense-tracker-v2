@@ -41,7 +41,7 @@
     </ion-button>
   </ion-item>
 
-  @if(!isLoading){
+  @if(($iconSearchResult |async)){
     <ion-grid>
       <ion-row>
         @for(iconName of ($iconSearchResult |async) ; let i = $index ;track i){
@@ -56,11 +56,4 @@
       </ion-row>
     </ion-grid>
   }
-
-  @if(isLoading){
-    <div class="loading-container">
-      <ion-spinner name="lines"></ion-spinner>
-    </div>
-  }
-
 </ion-content>

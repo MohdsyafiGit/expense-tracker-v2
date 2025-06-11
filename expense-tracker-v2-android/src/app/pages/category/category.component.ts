@@ -14,7 +14,7 @@ import { AddCategoryComponent } from './add-category/add-category.component';
   selector: 'app-category',
   imports: [IonList, CommonModule, IonItem, IonLabel, IonIcon, IonButton, IonModal , AddCategoryComponent],
   templateUrl: './category.component.html',
-  styleUrl: './category.component.css',
+  styleUrl: './category.component.scss',
 })
 export class CategoryComponent{
   @ViewChild(IonModal) modal: IonModal | undefined;

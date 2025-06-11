@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { FirebaseAuthentication, SignInResult, User } from '@capacitor-firebase/authentication';
 import { FirebaseFirestore } from '@capacitor-firebase/firestore';
 import { BehaviorSubject } from 'rxjs';
-import { FireStorePath } from './firestore.path.service';
+import { FsPathEnum } from '../models/firebase-path.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +12,22 @@ export class AuthService {
   user$ = new BehaviorSubject<User|null>(null);
 
   constructor(
-    private fsPath:FireStorePath
+    private readonly ngZone: NgZone
   ){
+
+    FirebaseAuthentication.removeAllListeners().then(() => {
+      FirebaseAuthentication.addListener('authStateChange', (change) => {
+        this.ngZone.run(() => {
+          this.user$.next(change.user);
+          this.user = change.user;
+        });
+      });
+    });
+
     FirebaseAuthentication.getCurrentUser().then((result) => {
       if (result) {
         this.user$.next(result.user);
+        this.user = result.user;
       } else {
         this.user$.next(null);
       }
@@ -39,14 +50,16 @@ export class AuthService {
 
   async addUserDocIfNotExist(userId: string, email: string | null) {
     const { snapshot } = await FirebaseFirestore.getDocument({
-      reference: this.fsPath.userDocumentPath(userId),
+      //not using fspathbuilder to avoid circular dependency
+      reference: `${FsPathEnum.userCollRef}/${userId}`, 
     });
 
     const userEmail = email ? email : "";
 
     if (!snapshot.data) {
       await FirebaseFirestore.setDocument({
-        reference: this.fsPath.userDocumentPath(userId),
+        //not using fspathbuilder to avoid circular dependency
+        reference: `${FsPathEnum.userCollRef}/${userId}`,
         data: { 
           email: userEmail
         },
@@ -59,12 +72,5 @@ export class AuthService {
       return true;
     else
       return false;
-  }
-
-  getUserId(){
-    if(this.user)
-      return this.user.uid;
-    else
-      return "";
   }
 }

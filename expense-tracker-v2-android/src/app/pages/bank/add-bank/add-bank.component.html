@@ -1,0 +1,59 @@
+<ion-header >
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <h3>Add Bank</h3>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" color="primary" [fullscreen]="true">
+  <ion-card color="secondary">
+    <ion-item color="secondary">
+      @if(bankPicUrl){
+        <ion-avatar slot="start"  (click)="takePicture()">
+          <img [src]="bankPicUrl" alt="image of the bank">
+        </ion-avatar>
+      }
+
+      @if(!bankPicUrl){
+        <ion-button slot="start" (click)="takePicture()" shape="round" color="primary" size="default">
+          <ion-icon slot="icon-only" name="image-outline"></ion-icon>
+        </ion-button>
+      }
+      <ion-input
+        class="custom"
+        label="Bank name"
+        labelPlacement="stacked"
+        type="text"
+        placeholder="Maybank, Cimb, Ambank"
+        [(ngModel)]="bankName"
+      ></ion-input>
+    </ion-item>
+  </ion-card>
+
+  <ion-card color="secondary">
+    <ion-item color="secondary">
+      <ion-input
+      class="custom"
+      label="Account name"
+      labelPlacement="stacked"
+      type="text"
+      placeholder="saving, credit, debit"
+      [(ngModel)]="accountName"
+      ></ion-input>
+      <ion-button slot="end" (click)="addNewAccount()" shape="round" color="primary" size="default">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+    @for(acc of accountList; let i = $index ;track i){
+      <ion-item color="tertiary">
+        <ion-label >{{acc.name}}</ion-label>
+        <ion-button slot="end" (click)="removeAcc(acc.id)" shape="round" color="primary" size="default">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-button>
+      </ion-item>
+    }
+  </ion-card>

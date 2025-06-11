@@ -1,0 +1,39 @@
+.pic-avatar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 40px;
+    img{
+        border-radius: 50%;
+    }
+}
+
+.normal{
+    height: 35px;
+    width: 35px;
+}
+
+.small{
+    height: 15px;
+    width: 15px;
+}
+
+/* loading.component.css */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999; /* Make sure this is higher than other content */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .spinner {
+    color: white;
+    font-size: 24px;
+  }
+  

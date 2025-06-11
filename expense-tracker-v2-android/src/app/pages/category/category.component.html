@@ -12,12 +12,12 @@
     </ng-template>
 </ion-modal>
 
-<ion-list class="ion-no-padding">
+<ion-list class="ion-no-padding ion-margin-bottom">
     @for(category of (categories$ | async); let i = $index ;track i){
       <ion-item color="primary" class="ion-activatable ripple-parent">
         <ion-icon slot="start" [src]="getIcon(category.iconName)" size="default" [name]="category.iconName"></ion-icon>
         <ion-label>{{category.name}}</ion-label>
-        <ion-button (click)="removeCategory(category.id)" shape="round" slot="end" color="secondary" size="default">
+        <ion-button (click)="removeCategory(category.id)" shape="round" slot="end" color="tertiary" size="default">
           <ion-icon slot="icon-only" size="default" name="trash" color="danger"></ion-icon>
         </ion-button>
       </ion-item>

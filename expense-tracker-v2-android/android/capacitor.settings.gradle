@@ -10,3 +10,9 @@ project(':capacitor-firebase-firestore').projectDir = new File('../../node_modul
 
 include ':capacitor-dialog'
 project(':capacitor-dialog').projectDir = new File('../../node_modules/@capacitor/dialog/android')
+
+include ':capacitor-firebase-storage'
+project(':capacitor-firebase-storage').projectDir = new File('../../node_modules/@capacitor-firebase/storage/android')
+
+include ':capacitor-camera'
+project(':capacitor-camera').projectDir = new File('../../node_modules/@capacitor/camera/android')
