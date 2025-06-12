@@ -1,5 +1,5 @@
-import { CategoryService } from './../../services/category.service';
-import { Category } from './../../models/category.model';
+import { CategoryService } from '../../services/category.service';
+import { Category } from '../../models/category.model';
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonList, IonModal, } from "@ionic/angular/standalone";
@@ -11,12 +11,12 @@ import { Dialog } from '@capacitor/dialog';
 import { AddCategoryComponent } from './add-category/add-category.component';
 
 @Component({
-  selector: 'app-category',
+  selector: 'app-category-list',
   imports: [IonList, CommonModule, IonItem, IonLabel, IonIcon, IonButton, IonModal , AddCategoryComponent],
-  templateUrl: './category.component.html',
-  styleUrl: './category.component.scss',
+  templateUrl: './category-list.component.html',
+  styleUrl: './category-list.component.scss',
 })
-export class CategoryComponent{
+export class CategoryListComponent{
   @ViewChild(IonModal) modal: IonModal | undefined;
   categories$ : Observable<Category[]> | undefined;
   allIcons = Object.keys(iconList).reduce((acc, iconName) => {

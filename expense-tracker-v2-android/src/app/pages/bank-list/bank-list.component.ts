@@ -11,12 +11,12 @@ import { addOutline, trashOutline } from 'ionicons/icons';
 import { LoadingService } from '../../services/loading.service';
 import { Dialog } from '@capacitor/dialog';
 @Component({
-  selector: 'app-bank',
-  imports: [IonButtons, IonToolbar, IonContent, IonButton, IonIcon, IonModal, IonCard, IonLabel, IonItem, IonAccordionGroup, IonAccordion, CommonModule, BankImgComponent, AddBankComponent],
-  templateUrl: './bank.component.html',
-  styleUrl: './bank.component.scss',
+  selector: 'app-bank-list',
+  imports: [IonContent, IonButton, IonIcon, IonModal, IonCard, IonLabel, IonItem, IonAccordionGroup, IonAccordion, CommonModule, BankImgComponent, AddBankComponent],
+  templateUrl: './bank-list.component.html',
+  styleUrl: './bank-list.component.scss',
 })
-export class BankComponent {
+export class BankListComponent {
   @ViewChild(IonModal) modal: IonModal | undefined;
   banks$ : Observable<Bank[]>;
   constructor(private bankService : BankService, private loadingService :LoadingService){
