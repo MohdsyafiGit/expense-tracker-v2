@@ -1,6 +1,6 @@
 import { Component, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonItem, IonInput, IonIcon, IonGrid, IonRow, IonCol, IonSpinner } from "@ionic/angular/standalone";
+import { IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonItem, IonInput, IonIcon, IonGrid, IonRow, IonCol } from "@ionic/angular/standalone";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import * as iconList from 'ionicons/icons';

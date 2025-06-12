@@ -25,22 +25,15 @@
                 </div>
               }
               <div slot="content">
-                <ion-item color="tertiary" class="ion-no-padding ion-no-margin">
-                  <ion-toolbar class="ion-no-padding ion-no-margin" color="tertiary">
-                    <ion-buttons slot="start">
-                      <ion-button fill="solid" [id]='"edit-bank" + bank.id' color="tertiary">
-                          <ion-label>Edit</ion-label>
-                          <ion-icon name="add-outline" slot="end" color="success"></ion-icon>
-                      </ion-button>
-                    </ion-buttons>
-                     <ion-buttons slot="end">
-                      <ion-button (click)="deleteBank(bank)" fill="solid" [id]='"delete-bank" + bank.id' color="tertiary">
-                          <ion-label>Delete</ion-label>
-                          <ion-icon name="trash-outline" slot="end" color="danger"></ion-icon>
-                      </ion-button>
-                    </ion-buttons>
-                  </ion-toolbar>
-
+                <ion-item color="tertiary">
+                  <ion-button class="edit-button" expand="block" fill="solid" [id]='"edit-bank" + bank.id' color="tertiary">
+                    <ion-label>Edit</ion-label>
+                    <ion-icon name="add-outline" slot="end" color="success"></ion-icon>
+                  </ion-button>
+                  <ion-button class="delete-button" expand="block" (click)="deleteBank(bank)" fill="solid" [id]='"delete-bank" + bank.id' color="tertiary">
+                    <ion-label>Delete</ion-label>
+                    <ion-icon name="trash-outline" slot="end" color="danger"></ion-icon>
+                  </ion-button>
                   <ion-modal #modalEdit [trigger]='"edit-bank" + bank.id' >
                     <ng-template>
                       <ion-content>

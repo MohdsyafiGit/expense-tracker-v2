@@ -4,3 +4,22 @@
     justify-content: end;
     padding:12px;
 }
+
+    ion-button.edit-button{
+        flex: 5;
+        --box-shadow : none;
+        --border-radius: 0;
+    }
+    ion-button.delete-button{
+        flex: 5;
+        --box-shadow : none;
+        --border-radius: 0;
+    }
+    
+.action-button-container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+
+
+}

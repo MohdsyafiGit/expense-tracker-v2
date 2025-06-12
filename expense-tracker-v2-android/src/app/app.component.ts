@@ -14,6 +14,8 @@ export class AppComponent {
     this.authService.user$.subscribe((user)=>{
       if(user){
         this.route.navigate(["/tabs/transactions"]);
+      }else{
+        this.route.navigate(["/login"]);
       }
     })
   }

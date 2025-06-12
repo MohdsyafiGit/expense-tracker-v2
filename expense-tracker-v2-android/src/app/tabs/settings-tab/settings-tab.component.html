@@ -1,6 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="secondary">
     <ion-title>Settings</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="onLogout()">
+          <ion-icon name="log-out-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
   </ion-toolbar>
   <ion-toolbar color="secondary">
     <ion-segment [scrollable]="true" value="category">

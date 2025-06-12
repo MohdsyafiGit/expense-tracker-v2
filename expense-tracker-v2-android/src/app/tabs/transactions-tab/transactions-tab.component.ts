@@ -1,15 +1,22 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonTitle, IonToolbar, IonContent, IonHeader } from "@ionic/angular/standalone";
-import { CategoryService } from '../../services/category.service';
+import { IonTitle, IonToolbar, IonContent, IonHeader, IonButton, IonButtons, IonIcon } from "@ionic/angular/standalone";
+import { addIcons } from 'ionicons';
+import { logOutOutline } from 'ionicons/icons';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-transactions-tab',
-  imports: [IonHeader, IonContent, IonToolbar, IonTitle, CommonModule],
+  imports: [IonIcon, IonButtons, IonButton, IonHeader, IonContent, IonToolbar, IonTitle, CommonModule],
   templateUrl: './transactions-tab.component.html',
   styleUrl: './transactions-tab.component.scss',
 })
 export class TransactionsTabComponent {
-  constructor(private categoryService : CategoryService){
+  constructor(private authService :AuthService){
+    addIcons({logOutOutline})
+  }
+
+  onLogout(){
+    this.authService.logout();
   }
 }

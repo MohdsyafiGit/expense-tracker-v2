@@ -67,10 +67,7 @@ export class AuthService {
     }
   }
 
-  isAuthenticated(){
-    if(this.user && this.user.uid)
-      return true;
-    else
-      return false;
+  async logout(){
+    await FirebaseAuthentication.signOut();
   }
 }
