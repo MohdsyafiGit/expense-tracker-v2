@@ -1,0 +1,38 @@
+<ion-header >
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <h3>Edit Category</h3>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" color="primary" [fullscreen]="true">
+  <form [formGroup]="editFilterFg">
+    <ion-list class="ion-no-padding">
+      <ion-item color="secondary">
+        <ion-input [formControl]="editFilterFg.titleFc" label="Title" labelPlacement="floating" placeholder="food, fuel ..." ></ion-input>
+      </ion-item>
+    </ion-list>
+    <app-category-picker [categoryFormArray]="editFilterFg.selectedCategoryIdsFc" [inputCategories$]="categories$"></app-category-picker>
+    <app-account-picker [bankAccFormArray]="editFilterFg.selectedBankAccIdsFc" [inputAccounts$]="bankAccounts$" ></app-account-picker>
+    <app-date-range-picker [dateRangeForm]="editFilterFg.dateRangeFg" [dateModes$]="dateModes$" [daysInMonth]="daysInMonth" [monthModifiers]="monthModifiers"></app-date-range-picker>
+    <ion-card color="primary" class="ion-no-margin ion-margin-top">
+      <ion-card-header color="tertiary">
+        <ion-label color="primary">Set as default filter : </ion-label>
+      </ion-card-header>
+      <ion-list lines="none" class="ion-no-padding">
+        <ion-radio-group [formControl]="editFilterFg.isDefaultFilterFc">
+          <ion-item color="secondary">
+            <ion-radio [value]="true"> Yes </ion-radio>
+          </ion-item>
+          <ion-item color="secondary">
+            <ion-radio [value]="false"> No </ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+  </ion-card>
+  </form>
+</ion-content>

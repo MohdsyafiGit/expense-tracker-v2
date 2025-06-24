@@ -1,0 +1,24 @@
+
+<form [formGroup]="dateRangeForm">
+  <ion-card color="primary" class="ion-no-padding ion-no-margin ion-margin-top">
+  <ion-card-header color="tertiary">
+      <ion-label color="primary">Date Range : </ion-label>
+  </ion-card-header>
+  <ion-list lines="none" class="ion-no-padding ion-no-margin">
+      <ion-radio-group [formControl]="dateRangeForm.dateModeFc">
+      <ion-item *ngFor="let date of dateModes$ | async;" color="secondary">
+          <ion-radio [value]="date.value">{{ date.label }}</ion-radio>
+      </ion-item>
+      </ion-radio-group>
+  </ion-list>
+  </ion-card>
+
+  @if(dateRangeForm.dateModeFc.value === "customMonthRange"){
+    <app-custom-month-range-picker [customMonthRangeFg]="dateRangeForm.customMonthRangeFg" [monthModifiers]="monthModifiers" [daysInMonth]="daysInMonth"></app-custom-month-range-picker>
+  }
+
+  @if(dateRangeForm.dateModeFc.value === "customDateRange"){
+    <app-custom-date-range-picker [startDate]="dateRangeForm.startDateFc" [endDate]="dateRangeForm.endDateFc"></app-custom-date-range-picker>
+  }
+</form>
+

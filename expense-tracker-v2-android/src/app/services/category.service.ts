@@ -1,21 +1,34 @@
 import { Injectable } from '@angular/core';
-import { AddCategoryForm, Category } from '../models/category.model';
-import { Observable } from 'rxjs';
+import { Category } from '../models/category.model';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { FirebasePathBuilderService } from './firebase-path-builder.service';
 import { FirebaseFirestore } from '@capacitor-firebase/firestore';
 import { Expense } from '../models/expense.model';
+import { AuthService } from './auth.service';
+import { AddCategoryForm } from '../forms/category/add-category.form';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoryService {
-  constructor(private path: FirebasePathBuilderService) {
-  }
   private categories: Category[] = [];
-
+  categories$ = new BehaviorSubject<Category[]>([]);
+  private categoriesSub : Subscription | null = null;
   public addCategoryForm : AddCategoryForm = new AddCategoryForm();
+  constructor(private path: FirebasePathBuilderService,private authService:AuthService) {
 
-  getCategories(): Observable<Category[]> {
+    this.authService.user$.subscribe((user)=>{
+      if(!user){
+        this.resetCategoriesSub();
+        this.categories = [];
+        this.categories$.next([]);
+      }else{
+        this.resetCategoriesSub();
+        this.categoriesSub = this.getCategories().subscribe();
+      }
+    })
+  }
+  private getCategories(): Observable<Category[]> {
     return new Observable(observer => {
       let callbackId = "";
 
@@ -31,6 +44,7 @@ export class CategoryService {
                 (item) => ({ ...item.data, id: item.id } as Category)
               );
               this.categories = list;
+              this.categories$.next(this.categories);
               observer.next(list);
             }
           });
@@ -95,6 +109,14 @@ export class CategoryService {
 
   camelToKebab(input: string): string {
     return input.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+  }
+
+  resetCategoriesSub(){
+    if(this.categoriesSub)
+    {
+      this.categoriesSub.unsubscribe();
+      this.categoriesSub = null;
+    }
   }
 
 }

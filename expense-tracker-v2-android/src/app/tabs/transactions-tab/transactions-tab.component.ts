@@ -16,7 +16,7 @@ export class TransactionsTabComponent {
     addIcons({logOutOutline})
   }
 
-  onLogout(){
-    this.authService.logout();
+  async onLogout(){
+   await this.authService.logout();
   }
 }

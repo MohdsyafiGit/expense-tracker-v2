@@ -6,9 +6,9 @@ import { BehaviorSubject, debounceTime, distinctUntilChanged, Subject } from 'rx
 import * as iconList from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { CategoryService } from '../../../services/category.service';
-import { AddCategoryForm } from '../../../models/category.model';
 import { Dialog } from '@capacitor/dialog';
 import { LoadingService } from '../../../services/loading.service';
+import { AddCategoryForm } from '../../../forms/category/add-category.form';
 
 @Component({
   selector: 'app-add-category',

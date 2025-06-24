@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { Bank } from "../models/bank.model";
 import { FirebaseFirestore } from "@capacitor-firebase/firestore";
 import { FirebasePathBuilderService } from "./firebase-path-builder.service";
 import { FirebaseStorage, UploadFileOptions } from "@capacitor-firebase/storage";
 import { BankPic } from "../models/bank-pic.model";
 import { Expense } from "../models/expense.model";
+import { AuthService } from "./auth.service";
 
 @Injectable({
     providedIn : "root"
@@ -13,13 +14,27 @@ import { Expense } from "../models/expense.model";
 export class BankService {
 
   private banks : Bank[] = [];
-  private banks$ = new BehaviorSubject<Bank[]>([]);
+  public banks$ = new BehaviorSubject<Bank[]>([]);
+  private banksSub : Subscription | null = null;
   bankPictures: Map<string, string> = new Map();
   bankPictures$ = new BehaviorSubject<Map<string, string>>(new Map());
 
-  constructor(private path: FirebasePathBuilderService){
+  constructor(private path: FirebasePathBuilderService,private authService : AuthService){
+
+    this.authService.user$.subscribe((user)=>{
+      if(!user){
+        this.resetBanksSub();
+        this.banks = [];
+        this.banks$.next([]);
+        this.bankPictures = new Map();
+        this.bankPictures$.next(new Map());
+      }else{
+        this.resetBanksSub();
+        this.banksSub = this.getBanks().subscribe();
+      }
+    })
   }
-  getBanks() : Observable<Bank[]>{
+  private getBanks() : Observable<Bank[]>{
     return new Observable<Bank[]>( (obs)=>{
 
         let callBackId = "";
@@ -198,5 +213,13 @@ export class BankService {
     await FirebaseFirestore.deleteDocument({reference: docRef,});
 
     return "";
+  }
+
+  resetBanksSub(){
+    if(this.banksSub)
+    {
+      this.banksSub.unsubscribe();
+      this.banksSub = null;
+    }
   }
 }

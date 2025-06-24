@@ -1,0 +1,29 @@
+.button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding:12px;
+}
+
+ion-col.filter-title {
+    background-color: var(--ion-color-tertiary);
+    color:  var(--ion-color-primary);
+    margin: 8px;
+    display: flex;
+    justify-items: start;
+    align-items: center;
+    padding-left: 12px;
+    box-shadow: -11px 8px 19px -7px rgba(0,0,0,0.75);
+    -webkit-box-shadow: -11px 8px 19px -7px rgba(0,0,0,0.75);
+    -moz-box-shadow: -11px 8px 19px -7px rgba(0,0,0,0.75);
+    border-radius: 10px;
+}
+
+ion-col.filter-delete-button {
+    background-color: var(--ion-color-primary);
+}
+
+
+ion-grid {
+    background-color: var(--ion-color-primary);
+}

@@ -1,0 +1,21 @@
+<div class="ion-padding ion-margin-top picker-label">Category :</div>
+<swiper-container slides-per-view="5" css-mode="true">
+  @for(item of categories$ | async; let i = $index;track i;){
+    <swiper-slide>
+      <div class="swiper-slide-container" (click)="handleCategorySelected(item.category.id)">
+          <span>{{item.category.name}}</span>
+          <ion-icon [name]="item.category.iconName" aria-hidden="true" color="primary"></ion-icon>
+          @if(item.state === selectState.include){
+            <div class="selected-badge">
+              <ion-icon size="small" name="checkmark-circle-outline" aria-hidden="true" color="success"></ion-icon>
+            </div>
+          }
+          @if(item.state === selectState.exclude){
+            <div class="selected-badge">
+              <ion-icon size="small" name="remove-circle-outline" aria-hidden="true" color="danger"></ion-icon>
+            </div>
+          }
+      </div>
+    </swiper-slide>
+  }
+</swiper-container>

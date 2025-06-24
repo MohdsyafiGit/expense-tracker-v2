@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Bank } from '../../models/bank.model';
 import { BankService } from '../../services/bank.service';
-import { IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonCard, IonModal, IonIcon, IonButton, IonContent, IonToolbar, IonButtons } from "@ionic/angular/standalone";
+import { IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonCard, IonModal, IonIcon, IonButton, IonContent, } from "@ionic/angular/standalone";
 import { BankImgComponent } from '../../shared/bank-img/bank-img.component';
 import { AddBankComponent } from './add-bank/add-bank.component';
 import { addIcons } from 'ionicons';
@@ -20,7 +20,7 @@ export class BankListComponent {
   @ViewChild(IonModal) modal: IonModal | undefined;
   banks$ : Observable<Bank[]>;
   constructor(private bankService : BankService, private loadingService :LoadingService){
-    this.banks$ = this.bankService.getBanks();
+    this.banks$ = this.bankService.banks$;
     addIcons({trashOutline,addOutline})
   }
 

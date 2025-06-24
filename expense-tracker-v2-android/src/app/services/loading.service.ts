@@ -21,7 +21,8 @@ export class LoadingService {
 
   async endLoading() {
     await this.modal?.dismiss();
-    this.modal = null;
+    if(this.modal)
+      this.modal = null;
   }
 
 }

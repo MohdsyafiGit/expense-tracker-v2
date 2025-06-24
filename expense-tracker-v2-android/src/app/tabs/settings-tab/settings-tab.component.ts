@@ -1,3 +1,4 @@
+import { FilterListComponent } from './../../pages/filter-list/filter-list.component';
 import { BankListComponent } from '../../pages/bank-list/bank-list.component';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -6,9 +7,14 @@ import { CategoryListComponent } from '../../pages/category-list/category-list.c
 import { AuthService } from '../../services/auth.service';
 import { logOutOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+
 @Component({
   selector: 'app-settings-tab',
-  imports: [IonButton, IonIcon, IonButtons, IonLabel, IonSegment, IonSegmentButton, IonContent, IonToolbar, IonTitle, IonHeader, CommonModule, IonSegmentView, IonSegmentContent, CategoryListComponent, BankListComponent],
+  imports: [
+    IonButton, IonIcon, IonButtons, IonLabel, IonSegment, 
+    IonSegmentButton, IonContent, IonToolbar, IonTitle, 
+    IonHeader, CommonModule, IonSegmentView, IonSegmentContent, 
+    CategoryListComponent, BankListComponent, FilterListComponent],
   templateUrl: './settings-tab.component.html',
   styleUrl: './settings-tab.component.scss',
 })
@@ -17,7 +23,7 @@ export class SettingsTabComponent {
     addIcons({logOutOutline})
   }
 
-  onLogout(){
-    this.authService.logout();
+  async onLogout(){
+    await this.authService.logout();
   }
 }

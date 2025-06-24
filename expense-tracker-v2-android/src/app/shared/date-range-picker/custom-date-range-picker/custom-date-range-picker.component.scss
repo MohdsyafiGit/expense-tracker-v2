@@ -1,0 +1,9 @@
+ion-datetime-button::part(native) {
+    background:var(--ion-color-tertiary);
+    color: var(--ion-color-primary);
+    margin: 8px;
+}
+
+ion-datetime.custom-datetime{
+    --background: var(--ion-color-primary); 
+}

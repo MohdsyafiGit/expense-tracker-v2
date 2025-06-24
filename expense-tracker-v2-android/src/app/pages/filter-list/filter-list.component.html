@@ -1,0 +1,29 @@
+<div class="button-container">
+  <ion-button fill="solid" id="new-filter" color="tertiary" shape="round">
+    <ion-label>Add</ion-label>
+    <ion-icon name="add-outline" slot="end"></ion-icon>
+  </ion-button>
+</div>
+
+<ion-modal trigger="new-filter">
+    <ng-template>
+      <app-add-filter (cancelClick)="closeModal()" (confirmClick)="closeModal()"></app-add-filter>
+    </ng-template>
+</ion-modal>
+
+<ion-grid class="ion-padding">
+  @for(filter of (filterList$ | async);let i = $index ;track i){
+    <ion-row color="tertiary">
+      <ion-col (click)="handleFilterClick(filter.id)" class="filter-title">
+        <ion-label>{{filter.title}}</ion-label>
+      </ion-col>
+      <ion-col size="auto" class="filter-delete-button">        
+        <div>
+          <ion-button color="secondary" slot="end" shape="round" (click)="handleDeleteFilter(filter.id)">
+            <ion-icon  slot="icon-only" name="trash" color="danger" ></ion-icon>
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  }
+</ion-grid>

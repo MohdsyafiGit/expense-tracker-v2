@@ -1,7 +1,7 @@
 import { LoadingService } from './../../../services/loading.service';
-import { Component, input, OnInit, output, ViewChild } from '@angular/core';
+import { Component, input, OnInit, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonCard, IonItem, IonAvatar, IonIcon, IonInput, IonLabel, IonModal, IonSpinner, ModalController } from "@ionic/angular/standalone";
+import { IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonCard, IonItem, IonAvatar, IonIcon, IonInput, IonLabel} from "@ionic/angular/standalone";
 import { Bank } from '../../../models/bank.model';
 import { Account } from '../../../models/account.model';
 import { BankPic } from '../../../models/bank-pic.model';
@@ -66,6 +66,7 @@ export class AddBankComponent implements OnInit{
   };
 
   private async savePicture(photo: Photo) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const response = await fetch(photo.webPath!);
     const blob = await response.blob();
     const fileName = this.bankName + '-' + UUID() + '.' + photo.format;

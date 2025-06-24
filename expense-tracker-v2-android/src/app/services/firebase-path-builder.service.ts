@@ -49,4 +49,12 @@ export class FirebasePathBuilderService {
     userBankImagePath(picName:string){
       return `${FsPathEnum.imagesStorageFolder}/${this.userId}/${picName}`
     }
+
+    userFilterCollectionPath(){
+        return `${FsPathEnum.userCollRef}/${this.userId}/${FsPathEnum.filterCollRef}`;
+    }
+
+    userFilterDocPath(filterId:string){
+        return `${FsPathEnum.userCollRef}/${this.userId}/${FsPathEnum.filterCollRef}/${filterId}`;
+    }
 }

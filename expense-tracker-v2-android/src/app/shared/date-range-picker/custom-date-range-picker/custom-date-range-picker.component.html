@@ -1,0 +1,50 @@
+<ion-card color="primary" class="ion-no-padding ion-no-margin ion-margin-top">
+  <form>
+    <ion-card-header color="tertiary">
+      <ion-label color="primary">Custom Date Range : </ion-label>
+    </ion-card-header>
+    <ion-list lines="none" mode="ios">
+      <ion-item color="secondary">
+        <ion-label>
+          Start Date:
+        </ion-label>
+        <ion-datetime-button color="tertiary" datetime="datetime-start" ></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true" [showBackdrop]="true" color="secondary" class="ion-no-padding ion-no-margin">
+          <ng-template>
+            <ion-card color="primary" class="ion-no-padding ion-no-margin">
+              <ion-datetime
+                class="custom-datetime"
+                color="secondary"
+                [presentation]="dateTimePresentation"  
+                [showDefaultButtons]="true" 
+                id="datetime-start" 
+                [formControl]="startDate">
+              </ion-datetime>
+            </ion-card>
+          </ng-template>
+        </ion-modal>
+      </ion-item>
+      <ion-item color="secondary">
+        <ion-label>
+          End Date:
+        </ion-label>
+        <ion-datetime-button color="tertiary" datetime="datetime-end" ></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true" [showBackdrop]="true" color="secondary" class="ion-no-padding ion-no-margin">
+          <ng-template>
+            <ion-card color="primary" class="ion-no-padding ion-no-margin">
+              <ion-datetime 
+                class="custom-datetime"
+                color="secondary"
+                [presentation]="dateTimePresentation" 
+                [showDefaultButtons]="true" 
+                id="datetime-end" 
+                [formControl]="endDate">
+              </ion-datetime>
+            </ion-card>
+          </ng-template>
+        </ion-modal>
+      </ion-item>
+
+    </ion-list>
+  </form>
+</ion-card>

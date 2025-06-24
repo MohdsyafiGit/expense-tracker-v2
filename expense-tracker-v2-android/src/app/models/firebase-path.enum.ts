@@ -3,5 +3,6 @@
     categoryCollRef = "categories",
     expensesCollRef = "expenses",
     banksCollRef = "banks",
-    imagesStorageFolder = "images"
+    imagesStorageFolder = "images",
+    filterCollRef = "filters"
   }  

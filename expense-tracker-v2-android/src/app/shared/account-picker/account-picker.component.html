@@ -1,0 +1,21 @@
+  <div class="ion-padding ion-margin-top picker-label">Account :</div>
+  <swiper-container slides-per-view="5" css-mode="true">
+    @for(item of accounts$ | async; let i = $index;track item;){
+      <swiper-slide>
+        <div class="swiper-slide-container" (click)="handleBankSelected(item.bankId,item.accId)">
+          <span>{{item.accName}}</span>
+          <app-bank-img size="small" [picName]="item.picName"></app-bank-img>
+          @if(item.state === selectState.include){
+            <div class="selected-badge">
+              <ion-icon size="small" name="checkmark-circle-outline" aria-hidden="true" color="success"></ion-icon>
+            </div>
+          }
+          @if(item.state === selectState.exclude){
+            <div class="selected-badge">
+              <ion-icon size="small" name="remove-circle-outline" aria-hidden="true" color="danger"></ion-icon>
+            </div>
+          }
+        </div>
+      </swiper-slide>
+    }
+  </swiper-container>

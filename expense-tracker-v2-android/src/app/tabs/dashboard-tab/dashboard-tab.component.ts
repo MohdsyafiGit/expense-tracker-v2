@@ -16,7 +16,7 @@ export class DashboardTabComponent {
     addIcons({logOutOutline})
   }
 
-  onLogout(){
-    this.authService.logout();
+  async onLogout(){
+    await this.authService.logout();
   }
 }

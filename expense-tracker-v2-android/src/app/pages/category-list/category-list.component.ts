@@ -28,7 +28,7 @@ export class CategoryListComponent{
     private categoryService : CategoryService
   ){
     addIcons(this.allIcons);
-    this.categories$ = this.categoryService.getCategories();
+    this.categories$ = this.categoryService.categories$;
   }
 
   getIcon(name: string) {

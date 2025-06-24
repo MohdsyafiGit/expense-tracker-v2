@@ -1,0 +1,24 @@
+ion-modal {
+  --height: auto;
+  align-items: end;
+}
+
+ion-picker {
+  margin-bottom: var(--ion-safe-area-bottom);
+}
+
+ion-picker {
+  --highlight-background: var(--ion-color-secondary);
+  --highlight-border-radius: 50px;
+}
+
+ion-row{
+  background: var(--ion-color-secondary);
+  padding: 8px;
+}
+
+ion-col{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
