@@ -4,5 +4,7 @@
     expensesCollRef = "expenses",
     banksCollRef = "banks",
     imagesStorageFolder = "images",
-    filterCollRef = "filters"
+    receiptsStorageFolder = "receipts",
+    filterCollRef = "filters",
+    templateCollRef = "templates"
   }  

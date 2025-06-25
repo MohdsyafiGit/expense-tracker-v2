@@ -16,3 +16,9 @@ project(':capacitor-firebase-storage').projectDir = new File('../../node_modules
 
 include ':capacitor-camera'
 project(':capacitor-camera').projectDir = new File('../../node_modules/@capacitor/camera/android')
+
+include ':capacitor-community-photoviewer'
+project(':capacitor-community-photoviewer').projectDir = new File('../../node_modules/@capacitor-community/photoviewer/android')
+
+include ':capacitor-filesystem'
+project(':capacitor-filesystem').projectDir = new File('../../node_modules/@capacitor/filesystem/android')

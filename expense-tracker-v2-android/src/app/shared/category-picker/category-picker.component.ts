@@ -56,7 +56,7 @@ export class CategoryPickerComponent implements OnInit , OnDestroy{
   }
 
   handleCategorySelected(catId:string){
-    const newList = this.categories.map(item => ({ ...item }));
+    const newList = this.categories.map(item => {return item});
 
       newList.forEach((item)=>{
         if(item.category.id === catId)

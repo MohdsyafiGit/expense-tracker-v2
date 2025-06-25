@@ -5,15 +5,15 @@ export class Filter{
   public selectedCategoryIds : {catId:string,state:SelectState}[] = []
   public selectedBankAccIds : {bankId:string,accId:string,state:SelectState}[] = []
   constructor(
-    public title : string,
-    public startDate : string,
-    public endDate : string,
-    public dateMode : string,
-    public customMonthStart : number,
-    public customMonthEnd : number,
-    public isDefaultFilter : boolean,
-    public customMonthStartModifier : string,
-    public customMonthEndModifier : string,
+    public title = "",
+    public startDate  = "",
+    public endDate  = "",
+    public dateMode = "",
+    public customMonthStart  = 0,
+    public customMonthEnd  = 0,
+    public isDefaultFilter  = false,
+    public customMonthStartModifier  = "",
+    public customMonthEndModifier  = "",
   ){}
 }
 

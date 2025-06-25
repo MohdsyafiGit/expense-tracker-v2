@@ -222,4 +222,37 @@ export class BankService {
       this.banksSub = null;
     }
   }
+
+  async getBankAccountDetail(bankId:string,accId:string){
+    const docRef = this.path.userBankDocPath(bankId);
+
+    const { snapshot } = await FirebaseFirestore.getDocument<Bank>({
+      reference: docRef,
+    });
+
+    const bankDocument = ({...snapshot.data,id:snapshot.id} as Bank);
+    
+    if(bankDocument){
+      const acc = bankDocument.accounts.find((acc)=>acc.id === accId);
+      if(acc)
+        return {bankName : bankDocument.bankName, accName: acc.name, picName: bankDocument.picName };
+      return undefined;
+    }
+    else
+      return undefined;
+  }
+  getBankId(accId: string) {
+  const bank = this.banks.find((input) => 
+      input.accounts.some(acc => acc.id === accId)
+    );
+    return bank ? bank.id : '';
+  }
+
+  getBankPicName(accId: string) {
+    const bank = this.banks.find((input) => 
+      input.accounts.some(acc => acc.id === accId)
+    );
+    return bank ? bank.picName : '';
+  }
 }
+

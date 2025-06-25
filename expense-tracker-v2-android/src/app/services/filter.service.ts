@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, ReplaySubject, Subject, Subscription } from "rxjs";
+import { BehaviorSubject, Observable, Subject, Subscription } from "rxjs";
 import { Filter } from "../models/filter.model";
 import { FirebaseFirestore } from "@capacitor-firebase/firestore";
 import { FirebasePathBuilderService } from "./firebase-path-builder.service";
@@ -16,8 +16,8 @@ export class FilterService {
   public filters$ = new BehaviorSubject<Filter[]>([]);
   public filterIdToEdit = "";
   dismissEditFilterModal$ = new Subject<void>();
-  currentFilter : Filter|undefined;
-  $filterChange  = new ReplaySubject<boolean>(1);
+  private currentFilter : Filter|undefined;
+  currentFilter$ = new BehaviorSubject<Filter| null>(null)
   daysInMonth :{ value: number; label: string }[] = []
   dateModes : ValueLabel[] = [
     { value : "all", label : "All"},
@@ -51,6 +51,13 @@ export class FilterService {
       }else{
         this.resetFiltersSub();
         this.filtersSub = this.getFilters().subscribe();
+        
+        this.getDefaultFilter()
+        .then((res)=>{
+          if(res){
+            this.changeFilter(res);
+          }
+        });
       }
     })
 
@@ -119,7 +126,7 @@ export class FilterService {
 
   async changeFilter(filter:Filter){
     this.currentFilter = filter;
-    this.$filterChange.next(true);
+    this.currentFilter$.next(filter);
   }
 
   async getDefaultFilter(){

@@ -7,7 +7,9 @@
     "@capacitor-firebase/firestore": "^7.2.0",
     "@capacitor/dialog": "^7.0.1",
     "@capacitor-firebase/storage": "^7.2.0",
-    "@capacitor/camera": "^7.0.1"
+    "@capacitor/camera": "^7.0.1",
+    "@capacitor-community/photoviewer": "^7.0.0",
+    "@capacitor/filesystem": "^7.1.1"
     
   },
   "devDependencies": {

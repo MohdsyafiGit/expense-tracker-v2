@@ -1,0 +1,7 @@
+@if(bankName && accountName && bankPicName){
+  <div class="account-detail-container">
+    <span>{{bankName}}-{{accountName}}</span>
+    <app-bank-img [picName]="bankPicName" [size]="size" [ngClass]="size"></app-bank-img>
+  </div>
+}
+

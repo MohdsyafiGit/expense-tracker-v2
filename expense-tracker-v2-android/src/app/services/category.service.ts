@@ -119,4 +119,18 @@ export class CategoryService {
     }
   }
 
+  async getCategoryDetail(iconDocumentId: string) : Promise<Category> {
+    const docRef = this.path.userCategoryDocPath(iconDocumentId);
+    const { snapshot } = await FirebaseFirestore.getDocument<Category>({reference: docRef,});
+    const categoryDocument = ({...snapshot.data,id:snapshot.id}) as Category;
+    return categoryDocument;
+  }
+
+  async getCategoryIconName(iconDocumentId: string) : Promise<string> {
+    const categoryDocument = await this.getCategoryDetail(iconDocumentId);
+    if(categoryDocument && categoryDocument.iconName)
+      return categoryDocument.iconName
+    else
+      return '';
+  }
 }

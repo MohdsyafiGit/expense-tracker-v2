@@ -1,0 +1,16 @@
+.date-time-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.accordion-slot{
+    background-color: var(--ion-color-clr-tertiery);
+    height: 450px;
+}
+
+img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}

@@ -1,0 +1,30 @@
+<ion-accordion-group [multiple]="true" >
+  @for(timeGroup of (expenses$ | async);let i = $index;track i){
+    <ion-accordion [value]="timeGroup.dateTime">
+      <ion-item slot="header" color="secondary">
+        <div class="accordion-header">
+          <span>{{timeGroup.dateTime  | date : 'mediumDate'}}</span> 
+          <span>RM {{timeGroup.total | number: '1.2-2'}}</span>
+        </div>
+      </ion-item>
+      @for(expense of timeGroup.expenses; let i = $index ;track i){
+        <div (click)="handleClickExpense(expense.id)" class="accordion-slot" slot="content">
+          <div class="icon-container">                  
+            <app-category-icon [categoryId]="expense.catId"></app-category-icon>
+          </div>   
+          <div class="expense-detail">
+            <div class="row">
+              <span class="expense-time">{{expense.dateTime  | date : 'shortTime'}}</span>
+              <app-account-detail [accountId]="expense.accId" [bankId]="expense.bankId"></app-account-detail> 
+            </div>
+            <div class="row">
+              <span class="expense-title">{{expense.title}}</span>
+              <span class="expense-price">RM {{expense.price | number: '1.2-2'}}</span>
+            </div>
+          </div> 
+        </div>
+      }
+    </ion-accordion>
+  }
+</ion-accordion-group>
+

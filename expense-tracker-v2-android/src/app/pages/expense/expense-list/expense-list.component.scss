@@ -1,0 +1,48 @@
+.accordion-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-right: 4px;
+}
+
+.accordion-slot{
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    background-color: var(--ion-color-tertiary);
+    color:var(--ion-color-dark);
+    height: fit-content;
+    font-weight: 500;
+    padding: 8px 8px 8px 8px;
+
+    .icon-container{
+        display: flex;
+        flex-direction: row;
+        width: 10%;
+    }
+    .expense-detail{
+        display: flex;
+        flex-direction: column;
+        padding: 0px;
+        width: 90%;
+        .row{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .expense-title{
+                word-wrap: break-word;
+                font-size: 16px;
+                padding: 0px;
+            }
+            .expense-price{
+                font-size: 16px;
+                padding: 0px;
+            }
+
+            .expense-time{
+                font-size: 11px;
+            }
+        }
+    }
+}

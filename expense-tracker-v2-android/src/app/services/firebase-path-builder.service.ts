@@ -34,6 +34,9 @@ export class FirebasePathBuilderService {
         return `${FsPathEnum.userCollRef}/${this.userId}/${FsPathEnum.expensesCollRef}`;
     }
 
+    userExpensesDocPath(expenseId:string){
+      return `${FsPathEnum.userCollRef}/${this.userId}/${FsPathEnum.expensesCollRef}/${expenseId}`;
+    }
     userBankCollectionPath(){
         return `${FsPathEnum.userCollRef}/${this.userId}/${FsPathEnum.banksCollRef}`;
     }
@@ -50,6 +53,14 @@ export class FirebasePathBuilderService {
       return `${FsPathEnum.imagesStorageFolder}/${this.userId}/${picName}`
     }
 
+    userReceiptFolderPath(){
+      return `${FsPathEnum.receiptsStorageFolder}/${this.userId}`
+    }
+
+    userReceiptPath(receiptName:string){
+      return `${FsPathEnum.receiptsStorageFolder}/${this.userId}/${receiptName}`
+    }
+
     userFilterCollectionPath(){
         return `${FsPathEnum.userCollRef}/${this.userId}/${FsPathEnum.filterCollRef}`;
     }
@@ -57,4 +68,14 @@ export class FirebasePathBuilderService {
     userFilterDocPath(filterId:string){
         return `${FsPathEnum.userCollRef}/${this.userId}/${FsPathEnum.filterCollRef}/${filterId}`;
     }
+
+    userTemplateCollectionPath(){
+        return `${FsPathEnum.templateCollRef}/${this.userId}/${FsPathEnum.filterCollRef}`;
+    }
+
+    userTemplateDocPath(templateId:string){
+        return `${FsPathEnum.templateCollRef}/${this.userId}/${FsPathEnum.filterCollRef}/${templateId}`;
+    }
+
+
 }

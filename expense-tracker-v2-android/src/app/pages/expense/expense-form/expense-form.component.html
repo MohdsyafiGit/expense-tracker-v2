@@ -1,0 +1,147 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="return-up-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ isEdit ? "Edit Expense" : "New Expense" }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content color="base">
+  <ion-list lines="none" [inset]="true" mode="ios">
+    <ion-item color="secondary">
+      <ion-select 
+      color="primary" 
+      [interfaceOptions]="{cssClass: 'custom-alert'}" 
+      label="Template" placeholder="Pick Template" 
+      [(ngModel)]="selectedTemplateId"
+      (ionChange)="handleTemplateChange($event)"
+      label-placement="stacked">
+      <ng-container *ngFor="let item of ( $templates | async )">
+        <ion-select-option class="custom-select-option" value="{{item.id}}">{{item.templateTitle}}</ion-select-option>
+      </ng-container>
+    </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-list lines="none" [inset]="true" mode="ios">      
+    <ion-item color="secondary">
+      <ion-input class="custom" label="Title" labelPlacement="floating" placeholder="food, fuel ..." [(ngModel)]="title"></ion-input>
+    </ion-item>
+    <ion-item color="secondary">
+      <ion-input  [maskitoElement]="maskPredicate"  [maskito]="priceMask" class="custom" label="Price" labelPlacement="floating" placeholder="RM ..." [(ngModel)]="price"></ion-input>
+    </ion-item>
+    <ion-item color="secondary">
+      @if(selectedCategoryIcon){
+        <ion-icon slot="start" [name]="selectedCategoryIcon" aria-hidden="true"></ion-icon>
+      }
+      <ion-select 
+        color="primary" 
+        [interfaceOptions]="{cssClass: 'custom-alert'}" 
+        label="Category" placeholder="Select a category" 
+        [(ngModel)]="selectedCategoryId"
+        (ionChange)="handleCategoryChange($event)"
+        label-placement="stacked">
+        <ng-container *ngFor="let item of ( $categories | async )">
+          <ion-select-option class="custom-select-option" value="{{item.id}}">{{item.name}}</ion-select-option>
+        </ng-container>
+      </ion-select>
+    </ion-item>
+    <ion-item color="secondary">
+      @if(selectedBankPic){
+        <div style="padding-right: 10px;">
+          <app-bank-img [picName]="selectedBankPic"></app-bank-img>
+        </div>
+      }
+      <ion-select 
+        color="primary" 
+        [interfaceOptions]="{cssClass: 'custom-alert'}" 
+        label="Account" 
+        placeholder="Select an account" 
+        [(ngModel)]="selectedAccountId"
+        label-placement="stacked"
+        (ionChange)="handleBankChange($event)">
+        @for (bank of ($banks | async); let i = $index ;track i) {
+          <ion-select-option disabled class="option-group-custom">{{bank.bankName}}</ion-select-option>
+            @for (acc of bank.accounts;  let i = $index ;track i) {
+              <ion-select-option class="alert-checkbox-label" value="{{acc.id}}">{{bank.bankName}} - {{acc.name}}</ion-select-option>
+            }
+        }
+      </ion-select>   
+    </ion-item>
+  </ion-list>
+  <div class="date-time-container">
+    <ion-datetime  id="datetime" [(ngModel)]="txnDateTime" color="secondary"></ion-datetime>
+  </div> 
+  <ion-card color="secondary">
+    <ion-card-header>
+      <ion-title>
+        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+          <div>
+            Receipts
+          </div>
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <ion-button (click)="triggerFileInput()" color="tertiary">
+              <ion-icon name="document"></ion-icon>
+            </ion-button>
+            <ion-button (click)="addReceipt()" color="tertiary">
+              <ion-icon name="camera"  ></ion-icon>
+            </ion-button>
+            <input #fileInput type="file" (change)="onFileChange($event)" accept=".pdf,image/*" hidden />
+          </div>
+        </div>
+      </ion-title>
+    </ion-card-header>
+    <ion-card-content color="tertiary" class="ion-no-padding">
+      <ion-accordion-group>
+        @for(receipt of (receipts$  | async);let i = $index ;track i){
+          <ion-accordion [value]="i">
+            <ion-item slot="header" color="tertiary">
+              <ion-label>{{receipt.fileName}}</ion-label>
+              <ion-button slot="end" color="primary" size="default" (click)="removeReceipt(receipt)">
+                <ion-icon name="trash" color="danger"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <div class="ion-padding" slot="content" class="accordion-slot">
+              @if(receipt.isPdf){
+
+                @if(receipt.fileBlob) {
+                  <ng2-pdfjs-viewer [pdfSrc]="receipt.fileBlob"></ng2-pdfjs-viewer>
+                }@else {
+                  <span>unable to load file</span>
+                }
+
+              }@else {
+
+                @if(receipt.firebaseUrl){    
+                  <img [src]="receipt.firebaseUrl" alt="transaction receipt" (click)="clickImage(receipt)" id="view-image">
+                }@else if(receipt.webPath) {               
+                  <img [src]="receipt.webPath" alt="transaction receipt" (click)="clickImage(receipt)" id="view-image">
+                }@else {
+                  <span>unable to load image</span>
+                }
+                <ion-modal #IonModal trigger="view-image">
+                  <ion-content>
+                    <div id="photoviewer-container">
+                    </div>
+                  </ion-content>
+                </ion-modal>
+              }
+            </div>
+          </ion-accordion>
+        }
+      </ion-accordion-group>
+
+    </ion-card-content>
+  </ion-card>
+  <ion-button class="save-button" color="save" shape="round" expand="full" fill="outline" (click)="handleSave()">Save</ion-button>
+  <ion-alert
+  class="warning-alert"
+  color="secondary"
+  [isOpen]="isAlertOpen"
+  header="Warning"
+  [message]="alertMsg"
+  (didDismiss)="setOpen(false)"
+  [buttons]="alertButtons"
+></ion-alert>
+</ion-content>

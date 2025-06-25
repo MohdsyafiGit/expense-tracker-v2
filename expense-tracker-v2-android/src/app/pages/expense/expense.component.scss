@@ -1,0 +1,100 @@
+h3{
+    text-align: left;
+    padding: 0px;
+    font-size: 18px;
+    margin: 0px;
+}
+
+.padding-title{
+    padding: 8px;
+}
+
+ion-datetime-button::part(native) {
+    background:var(--ion-color-tertiary);
+    color: var(--ion-color-primary);
+    padding: 8px 16px 8px 16px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    font-size: 24px;
+}
+
+.account-total-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--ion-color-base);
+    padding: 8px 16px 8px 16px;
+}
+
+.chart-container{
+    background-color: var(--ion-color-secondary);
+    padding: 6px;
+
+    .toggle-container{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 8px;
+        align-items: center;
+        padding: 8px;
+    }
+    padding-bottom: 12px;
+}
+
+.home-filter-container{
+    min-height: 35vh; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+
+    .filter-date-container{
+        display: flex;
+    }
+    div{
+        margin-top: 12px;
+
+        .filter-total{
+            font-size: 2rem;
+            font-weight: 400;
+        }
+        .filter-category{
+            margin-right: 12px;
+        }
+        .filter-text-center{
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+        }
+        .filter-date{
+            border-radius: 8px;
+            padding: 8px 16px 8px 16px;
+            color: var(--ion-color-light);
+            background-color: var(--ion-color-secondary);
+            font-size: 1rem;
+            margin-left: 12px;
+            margin-right: 12px;
+            font-weight: 500;
+        }
+
+
+    }
+}
+
+.accordion-slot{
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    background-color: var(--ion-color-tertiary);
+    color:var(--ion-color-dark);
+    height: fit-content;
+    font-weight: 500;
+    padding: 8px 8px 8px 8px;
+
+    .icon-container{
+        display: flex;
+        flex-direction: row;
+        width: 10%;
+    }
+}
