@@ -20,14 +20,16 @@
                       <ion-button (click)="startModimodal.dismiss(startModifier, 'confirm')">Done</ion-button>
                     </ion-buttons>
                   </ion-toolbar>
-                  <ion-picker>
-                    <ion-picker-column [value]="startModifier" (ionChange)="onChangeStartMonthModifier($event)">
-                      <ion-picker-column-option value="" disabled="true">--</ion-picker-column-option>
-                      @for(modifier of monthModifiers;let i = $index; track i){
-                        <ion-picker-column-option [value]="modifier.value">{{modifier.label}}</ion-picker-column-option>
-                      }
-                    </ion-picker-column>
-                  </ion-picker>
+                  <ion-card color="secondary" class="ion-no-margin ion-no-padding">
+                    <ion-picker class="filter-picker">
+                      <ion-picker-column [value]="startModifier" (ionChange)="onChangeStartMonthModifier($event)">
+                        <ion-picker-column-option value="" disabled="true">--</ion-picker-column-option>
+                        @for(modifier of monthModifiers;let i = $index; track i){
+                          <ion-picker-column-option [value]="modifier.value">{{modifier.label}}</ion-picker-column-option>
+                        }
+                      </ion-picker-column>
+                    </ion-picker>
+                  </ion-card>                  
                 </ng-template>
               </ion-modal>        
             </ion-col>
@@ -43,14 +45,16 @@
                       <ion-button (click)="startModal.dismiss(startDay, 'confirm')">Done</ion-button>
                     </ion-buttons>
                   </ion-toolbar>
-                  <ion-picker>
-                    <ion-picker-column [value]="startDay" (ionChange)="onChangeStartMonth($event)">
-                      <ion-picker-column-option value="" disabled="true">--</ion-picker-column-option>
-                      @for(day of daysInMonth;let i = $index; track i){
-                        <ion-picker-column-option [value]="day.value">{{day.label}}</ion-picker-column-option>
-                      }
-                    </ion-picker-column>
-                  </ion-picker>
+                  <ion-card color="secondary" class="ion-no-margin ion-no-padding">
+                    <ion-picker class="filter-picker">
+                      <ion-picker-column [value]="startDay" (ionChange)="onChangeStartMonth($event)">
+                        <ion-picker-column-option value="" disabled="true">--</ion-picker-column-option>
+                        @for(day of daysInMonth;let i = $index; track i){
+                          <ion-picker-column-option [value]="day.value">{{day.label}}</ion-picker-column-option>
+                        }
+                      </ion-picker-column>
+                    </ion-picker>
+                  </ion-card>                  
                 </ng-template>
               </ion-modal>
             </ion-col>
@@ -71,14 +75,16 @@
                       <ion-button (click)="endModiModal.dismiss(endModifier, 'confirm')">Done</ion-button>
                     </ion-buttons>
                   </ion-toolbar>
-                  <ion-picker>
-                    <ion-picker-column [value]="endModifier" (ionChange)="onChangeEndMonthModifier($event)">
-                      <ion-picker-column-option value="" disabled="true">--</ion-picker-column-option>
-                      @for(modifier of monthModifiers;let i = $index; track i){
-                        <ion-picker-column-option [value]="modifier.value">{{modifier.label}}</ion-picker-column-option>
-                      }
-                    </ion-picker-column>
-                  </ion-picker>
+                  <ion-card color="secondary" class="ion-no-margin ion-no-padding">
+                    <ion-picker class="filter-picker">
+                      <ion-picker-column [value]="endModifier" (ionChange)="onChangeEndMonthModifier($event)">
+                        <ion-picker-column-option value="" disabled="true">--</ion-picker-column-option>
+                        @for(modifier of monthModifiers;let i = $index; track i){
+                          <ion-picker-column-option [value]="modifier.value">{{modifier.label}}</ion-picker-column-option>
+                        }
+                      </ion-picker-column>
+                    </ion-picker>
+                  </ion-card>
                 </ng-template>
               </ion-modal>
             </ion-col>
@@ -94,14 +100,16 @@
                       <ion-button (click)="endModal.dismiss(endDay, 'confirm')">Done</ion-button>
                     </ion-buttons>
                   </ion-toolbar>
-                  <ion-picker>
-                    <ion-picker-column [value]="endDay" (ionChange)="onChangeEndMonth($event)">
-                      <ion-picker-column-option value="" disabled="true">--</ion-picker-column-option>
-                      @for(day of daysInMonth;let i = $index; track i){
-                        <ion-picker-column-option [value]="day.value">{{day.label}}</ion-picker-column-option>
-                      }
-                    </ion-picker-column>
-                  </ion-picker>
+                  <ion-card color="secondary" class="ion-no-margin ion-no-padding">
+                    <ion-picker class="filter-picker">
+                      <ion-picker-column [value]="endDay" (ionChange)="onChangeEndMonth($event)">
+                        <ion-picker-column-option value="" disabled="true">--</ion-picker-column-option>
+                        @for(day of daysInMonth;let i = $index; track i){
+                          <ion-picker-column-option [value]="day.value">{{day.label}}</ion-picker-column-option>
+                        }
+                      </ion-picker-column>
+                    </ion-picker>
+                  </ion-card>
                 </ng-template>
               </ion-modal>
             </ion-col>

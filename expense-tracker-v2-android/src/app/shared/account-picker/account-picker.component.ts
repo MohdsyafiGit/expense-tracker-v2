@@ -43,6 +43,12 @@ export class AccountPickerComponent implements OnInit, OnDestroy{
             acc.state = item.state;
         })
 
+        if(list.length === 0){
+          this.accounts.forEach((item)=>{
+            item.state = SelectState.none;
+          })
+        }
+
         this.accounts$.next(this.accounts);
       })
     }
@@ -54,38 +60,38 @@ export class AccountPickerComponent implements OnInit, OnDestroy{
       this.destroy$.complete();
     }
   }
-  handleBankSelected(bankId:string,accId:string){
-    const newList =  this.accounts.map((item)=> {return item});
 
-      newList.forEach((item)=>{
-        if(item.bankId === bankId && item.accId === accId)
-        {
-          switch(item.state){
-            case SelectState.exclude:
-              item.state = SelectState.none;
-              break;
-            case SelectState.include:
-              item.state = SelectState.exclude;
-              break;
-            case SelectState.none:
-              item.state = SelectState.include;
-              break;
-            default:
-              item.state = SelectState.none;
-          }
-        }     
-      });
-      this.updateBankAccFormArray(newList);
+  handleBankSelected(bankId:string,accId:string){
+    const newList = this.accounts.map((item)=> {return {...item}}); // Also fix shallow copy issue
+
+    newList.forEach((item)=>{
+      if(item.bankId === bankId && item.accId === accId) {
+        switch(item.state){
+          case SelectState.exclude:
+            item.state = SelectState.none;
+            break;
+          case SelectState.include:
+            item.state = SelectState.exclude;
+            break;
+          case SelectState.none:
+            item.state = SelectState.include;
+            break;
+          default:
+            item.state = SelectState.none;
+        }
+      }     
+    });
+    this.updateBankAccFormArray(newList);
   }
 
   updateBankAccFormArray(list:AccountNormalized[]){
-    const filteredList = list.filter((item)=>item.state === SelectState.exclude || item.state === SelectState.include);
+    if(!this.bankAccFormArray) return;
 
-    if(this.bankAccFormArray){
-      this.bankAccFormArray.clear();
-      filteredList.forEach((item)=>{
-        this.bankAccFormArray?.push(new FilterBankForm(item.bankId,item.accId,item.state));
-      })
-    }
+    const filteredList = list.filter((item)=>item.state === SelectState.exclude || item.state === SelectState.include).map((x)=> {return x});
+
+    this.bankAccFormArray.clear();
+    filteredList.forEach((item)=>{
+      this.bankAccFormArray?.push(new FilterBankForm(item.bankId,item.accId,item.state));
+    })
   }
 }

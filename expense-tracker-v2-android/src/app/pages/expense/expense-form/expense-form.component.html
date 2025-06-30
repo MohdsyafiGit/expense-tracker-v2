@@ -2,14 +2,19 @@
   <ion-toolbar color="secondary">
     <ion-buttons slot="start">
       <ion-button (click)="goBack()">
-        <ion-icon name="return-up-back"></ion-icon>
+        Cancel
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ isEdit ? "Edit Expense" : "New Expense" }}</ion-title>
+    <h3>{{ isEdit ? "Edit Expense" : "New Expense" }}</h3>
+    <ion-buttons slot="end">
+      <ion-button (click)="handleSave()">
+        Save
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content color="base">
-  <ion-list lines="none" [inset]="true" mode="ios">
+<ion-content color="primary" class="ion-padding-bottom">
+  <ion-list lines="none" [inset]="true" class="ion-no-margin ion-no-padding">
     <ion-item color="secondary">
       <ion-select 
       color="primary" 
@@ -24,7 +29,7 @@
     </ion-select>
     </ion-item>
   </ion-list>
-  <ion-list lines="none" [inset]="true" mode="ios">      
+  <ion-list lines="none" [inset]="true" class="ion-no-margin ion-no-padding">      
     <ion-item color="secondary">
       <ion-input class="custom" label="Title" labelPlacement="floating" placeholder="food, fuel ..." [(ngModel)]="title"></ion-input>
     </ion-item>
@@ -71,7 +76,7 @@
     </ion-item>
   </ion-list>
   <div class="date-time-container">
-    <ion-datetime  id="datetime" [(ngModel)]="txnDateTime" color="secondary"></ion-datetime>
+    <ion-datetime  id="datetime" [(ngModel)]="txnDateTime" color="secondary" class="custom-datetime"></ion-datetime>
   </div> 
   <ion-card color="secondary">
     <ion-card-header>
@@ -134,7 +139,6 @@
 
     </ion-card-content>
   </ion-card>
-  <ion-button class="save-button" color="save" shape="round" expand="full" fill="outline" (click)="handleSave()">Save</ion-button>
   <ion-alert
   class="warning-alert"
   color="secondary"

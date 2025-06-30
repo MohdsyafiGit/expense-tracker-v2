@@ -16,7 +16,7 @@ export class GradientBackgroundDirective implements OnChanges {
   }
 
   private updateBackground() {
-    const gradient = `linear-gradient(to right, #7984c6ff ${this.percentage}%, var(--ion-color-tertiary) ${this.percentage}%)`;
+    const gradient = `linear-gradient(to right, #62628e ${this.percentage}%, var(--ion-color-tertiary) ${this.percentage}%)`;
     this.renderer.setStyle(this.el.nativeElement, 'background', gradient);
   }
 }

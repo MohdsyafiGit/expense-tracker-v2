@@ -1,9 +1,10 @@
-import { SelectState } from "./select-state.enum";
+import { SelectAccountId } from "./select-account-id.model";
+import { SelectCategoryId } from "./select-category-id.model";
 
 export class Filter{
   public id = "";
-  public selectedCategoryIds : {catId:string,state:SelectState}[] = []
-  public selectedBankAccIds : {bankId:string,accId:string,state:SelectState}[] = []
+  public selectedCategoryIds : SelectCategoryId[] = []
+  public selectedBankAccIds : SelectAccountId[] = []
   constructor(
     public title = "",
     public startDate  = "",

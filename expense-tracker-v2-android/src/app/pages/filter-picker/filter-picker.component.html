@@ -1,0 +1,54 @@
+<ion-header >
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <h3>Choose Filter</h3>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" color="primary" [fullscreen]="true">
+  <div style="display: flex;flex-direction: column;align-items: center; margin: 12px;">
+    <ion-button id="filter-modal" shape="round" color="tertiary" expand="full">
+      <span style="padding-top: 3px; margin-right: 8px;">{{ currentFilter.title}}</span>
+      <ion-icon name="filter-outline"></ion-icon>
+    </ion-button>
+    <ion-modal #filterModal trigger="filter-modal">
+      <ng-template>
+        <ion-toolbar color="tertiary" class="ion-no-margin ion-no-padding">
+          <ion-buttons slot="start">
+            <ion-button (click)="closeFilterModal()" >Cancel
+            </ion-button>
+          </ion-buttons>
+          <h3>Saved filters</h3>
+          <ion-buttons slot="end">
+            <ion-button (click)="applyPreDefinedFilter()" [strong]="true">Confirm
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <ion-card color="secondary" class="ion-no-margin ion-no-padding">
+          <ion-picker class="filter-picker">
+            <ion-picker-column #filterPicker [value]="currentFilter.id" (ionChange)="onFilterChange($event)">
+              @for(filterItem of (filters$ | async);let i = $index; track i){
+                <ion-picker-column-option [value]="filterItem.id">{{filterItem.title}}</ion-picker-column-option>
+              }
+            </ion-picker-column>
+            </ion-picker>
+          </ion-card>
+        </ng-template>
+    </ion-modal>
+  </div>
+  <form [formGroup]="filterFg">
+    <ion-list class="ion-no-padding">
+      <ion-item color="secondary">
+        <ion-label label="Title" >{{filterFg.titleFc.value}}</ion-label>
+      </ion-item>
+    </ion-list>
+    <app-category-picker [categoryFormArray]="filterFg.selectedCategoryIdsFc" [inputCategories$]="categories$"></app-category-picker>
+    <app-account-picker [bankAccFormArray]="filterFg.selectedBankAccIdsFc" [inputAccounts$]="bankAccounts$" ></app-account-picker>
+    <app-date-range-picker [dateRangeForm]="filterFg.dateRangeFg" [dateModes$]="dateModes$" [daysInMonth]="daysInMonth" [monthModifiers]="monthModifiers"></app-date-range-picker>
+  </form>
+</ion-content>
+

@@ -37,11 +37,18 @@ export class CategoryPickerComponent implements OnInit , OnDestroy{
       this.categoryFormArray?.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe((list :{catId:string,state:SelectState}[])=>{
+
         list.forEach((item)=>{
-          const acc = this.categories.find((x)=>x.category.id === item.catId);
-          if(acc)
-            acc.state = item.state;
+          const cat = this.categories.find((x)=>x.category.id === item.catId);
+          if(cat)
+            cat.state = item.state;
         })
+
+        if(list.length === 0){
+          this.categories.forEach((item)=>{
+            item.state = SelectState.none;
+          })
+        }
 
         this.categories$.next(this.categories);
       })
@@ -56,7 +63,7 @@ export class CategoryPickerComponent implements OnInit , OnDestroy{
   }
 
   handleCategorySelected(catId:string){
-    const newList = this.categories.map(item => {return item});
+    const newList = this.categories.map(item => {return {...item}});
 
       newList.forEach((item)=>{
         if(item.category.id === catId)

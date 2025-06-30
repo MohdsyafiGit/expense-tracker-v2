@@ -9,18 +9,16 @@
           Start Date:
         </ion-label>
         <ion-datetime-button color="tertiary" datetime="datetime-start" ></ion-datetime-button>
-        <ion-modal [keepContentsMounted]="true" [showBackdrop]="true" color="secondary" class="ion-no-padding ion-no-margin">
+        <ion-modal [keepContentsMounted]="true" >
           <ng-template>
-            <ion-card color="primary" class="ion-no-padding ion-no-margin">
-              <ion-datetime
-                class="custom-datetime"
-                color="secondary"
-                [presentation]="dateTimePresentation"  
-                [showDefaultButtons]="true" 
-                id="datetime-start" 
-                [formControl]="startDate">
-              </ion-datetime>
-            </ion-card>
+            <ion-datetime
+              class="custom-datetime-picker"
+              color="secondary"
+              [presentation]="dateTimePresentation"  
+              [showDefaultButtons]="true" 
+              id="datetime-start" 
+              [formControl]="startDate">
+            </ion-datetime>
           </ng-template>
         </ion-modal>
       </ion-item>
@@ -29,18 +27,16 @@
           End Date:
         </ion-label>
         <ion-datetime-button color="tertiary" datetime="datetime-end" ></ion-datetime-button>
-        <ion-modal [keepContentsMounted]="true" [showBackdrop]="true" color="secondary" class="ion-no-padding ion-no-margin">
+        <ion-modal [keepContentsMounted]="true">
           <ng-template>
-            <ion-card color="primary" class="ion-no-padding ion-no-margin">
-              <ion-datetime 
-                class="custom-datetime"
-                color="secondary"
-                [presentation]="dateTimePresentation" 
-                [showDefaultButtons]="true" 
-                id="datetime-end" 
-                [formControl]="endDate">
-              </ion-datetime>
-            </ion-card>
+            <ion-datetime 
+              class="custom-datetime-picker"
+              color="secondary"
+              [presentation]="dateTimePresentation" 
+              [showDefaultButtons]="true" 
+              id="datetime-end" 
+              [formControl]="endDate">
+            </ion-datetime>
           </ng-template>
         </ion-modal>
       </ion-item>

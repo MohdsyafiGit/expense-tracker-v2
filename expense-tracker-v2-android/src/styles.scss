@@ -13,3 +13,124 @@
   --background:rgba(70, 60, 202, 0.3);
 
   }
+
+ion-picker.filter-picker {
+  --fade-background-rgb: var(--ion-color-secondary-rgb);
+}
+
+ion-picker {
+  margin-bottom: var(--ion-safe-area-bottom);
+
+}
+
+ion-datetime-button::part(native) {
+    background:var(--ion-color-tertiary);
+    color: var(--ion-color-primary);
+    margin: 8px;
+}
+
+ion-datetime.custom-datetime{
+  --background: var(--ion-color-secondary); 
+  color: var(--ion-color-light); 
+  --wheel-fade-background-rgb: var(--ion-color-secondary-rgb); 
+}
+
+ion-datetime.custom-datetime::part(calendar-day) {
+  /* Styles for individual day buttons */
+  background-color: var(--ion-color-secondary);
+  color: var(--ion-color-light);
+}
+
+ion-datetime.custom-datetime::part(calendar-day active) {
+  /* Styles for the currently selected day */
+  background-color: var(--ion-color-tertiary);
+  color: var(--ion-color-primary);
+  font-weight: 500;
+}
+
+ion-datetime.custom-datetime::part(calendar-day disabled) {
+  /* Styles for disabled days */
+  opacity: 0.5;
+  color: #ccc;
+  pointer-events: none;
+}
+
+ion-datetime.custom-datetime::part(calendar-day today) {
+  /* Styles for today's date */
+  border: 1px solid var(--ion-color-primary);
+  color: var(--ion-color-primary);
+}
+
+ion-datetime.custom-datetime::part(time-button) {
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-light);
+}
+
+ion-datetime.custom-datetime::part(wheel-item) {
+  background-color: var(--ion-color-secondary);
+  color: var(--ion-color-light);
+}
+
+ion-datetime.custom-datetime::part(wheel-item active) {
+  color: var(--ion-color-primary);
+  font-weight: 500;
+}
+
+ion-datetime.custom-datetime::part(month-year-button) {
+  background-color: var(--ion-color-secondary);
+  color: var(--ion-color-light);
+}
+
+ion-datetime.custom-datetime-picker{
+  --background: var(--ion-color-primary); 
+  color: var(--ion-color-light); 
+  --wheel-fade-background-rgb: var(--ion-color-primary-rgb); 
+
+}
+
+ion-datetime.custom-datetime-picker::part(calendar-day) {
+  /* Styles for individual day buttons */
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-light);
+  font-size: 12px !important;
+}
+
+ion-datetime.custom-datetime-picker::part(calendar-day active) {
+  /* Styles for the currently selected day */
+  background-color: var(--ion-color-tertiary);
+  color: var(--ion-color-primary);
+  font-weight: 500;
+}
+
+ion-datetime.custom-datetime-picker::part(calendar-day disabled) {
+  /* Styles for disabled days */
+  opacity: 0.5;
+  color: #ccc;
+  pointer-events: none;
+}
+
+ion-datetime.custom-datetime-picker::part(calendar-day today) {
+  /* Styles for today's date */
+  border: 1px solid var(--ion-color-secondary);
+  color: var(--ion-color-secondary);
+}
+
+ion-datetime.custom-datetime-picker::part(time-button) {
+  background-color: var(--ion-color-secondary);
+  color: var(--ion-color-light);
+}
+
+ion-datetime.custom-datetime-picker::part(wheel-item) {
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-light);
+}
+
+ion-datetime.custom-datetime-picker::part(wheel-item active) {
+  color: var(--ion-color-secondary);
+  font-weight: 500;
+}
+
+ion-datetime.custom-datetime-picker::part(month-year-button) {
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-light);
+}

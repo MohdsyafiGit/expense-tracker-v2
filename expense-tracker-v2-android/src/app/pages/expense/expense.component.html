@@ -7,7 +7,7 @@
 
 <div class="home-filter-container" id="home-content">
   <div style="display: flex;flex-direction: column;align-items: center; margin: 12px;">
-    <ion-button id="filter-modal" shape="round" color="tertiary">
+    <ion-button shape="round" color="tertiary" (click)="openFilterPicker()">
       <span style="padding-top: 3px; margin-right: 8px;">{{ currentFilter.title}}</span>
       <ion-icon name="filter-outline"></ion-icon>
     </ion-button>

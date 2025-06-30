@@ -1,16 +1,16 @@
 import { BankService } from './../../../services/bank.service';
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild, } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { 
   IonLabel, IonContent, IonHeader, IonToolbar, IonTitle, 
   IonButtons, IonCard, IonCardHeader, IonCardContent, 
   IonIcon, IonList, IonItem, IonInput, IonSelect, IonSelectOption, IonDatetime, 
    IonModal, IonButton, IonAccordionGroup,IonAccordion, 
-   ModalController} from '@ionic/angular/standalone';
+   ModalController, IonDatetimeButton} from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { returnUpBack, add, camera, document, eye, trash } from 'ionicons/icons';
+import { returnUpBack, add, camera, document, eye, trash, saveOutline } from 'ionicons/icons';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LocationStrategy } from '@angular/common';
 import { MaskitoDirective } from '@maskito/angular';
@@ -48,8 +48,8 @@ export class ExpenseFormComponent implements OnInit {
 
   @ViewChild('IonModal') modal: ElementRef | undefined;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-  isEdit  = false;
-  expenseId  = "";
+  @Input() isEdit  = false;
+  @Input() expenseId  = "";
   $categories  = new  Observable<Category[]>();
   $banks   = new Observable<Bank[]>();
   $templates  = new Observable<Template[]>();
@@ -66,7 +66,7 @@ export class ExpenseFormComponent implements OnInit {
   receipts : Receipt[] = [];
   receipts$ : BehaviorSubject<Receipt[]> = new BehaviorSubject<Receipt[]>([]);
   selectedFile: File | null = null;
-
+  dateTimePresentation = "date";
   alertMsg = ""
   isAlertOpen = false;
   public alertButtons = [
@@ -115,21 +115,14 @@ export class ExpenseFormComponent implements OnInit {
     private expenseService:ExpenseService,
     private categoryService : CategoryService,
     private bankService : BankService,
-    private route:ActivatedRoute,
     private router:Router,
-    private locationStrategy:LocationStrategy,
     private modalController: ModalController) { 
-    addIcons({returnUpBack,document,camera,trash,eye,add});
+    addIcons({returnUpBack,saveOutline,document,camera,trash,eye,add});
   }
 
   async ngOnInit(): Promise<void> {
 
-    const id = this.route.snapshot.params['id']
-
-    if(id){
-      this.isEdit = true;
-      this.expenseId = id;
-
+    if(this.isEdit){
       const res = await this.expenseService.getExpenseDetail(this.expenseId);
 
       if(res){

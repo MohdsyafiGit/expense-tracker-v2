@@ -18,6 +18,7 @@ import { CategoryIconComponent } from '../../shared/category-icon/category-icon.
 import { AccountDetailComponent } from '../../shared/account-detail/account-detail.component';
 import { GradientBackgroundDirective } from '../../shared/gradient-background.directive';
 import { ExpenseFormComponent } from './expense-form/expense-form.component';
+import { FilterPickerComponent } from '../filter-picker/filter-picker.component';
 
 @Component({
   selector: 'app-expense',
@@ -223,6 +224,17 @@ export class ExpenseComponent implements OnDestroy{
     const modal  = await this.modalCtrl.create({
       component : ExpenseFormComponent
     })
+    modal.present();
+  }
+
+  async openFilterPicker(){
+    const modal = await this.modalCtrl.create({
+      component : FilterPickerComponent,
+      componentProps : {
+        currentFilter : this.currentFilter
+      }
+    })
+
     modal.present();
   }
 }

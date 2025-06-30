@@ -1,10 +1,11 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonAccordionGroup, IonAccordion, IonItem, IonModal } from "@ionic/angular/standalone";
+import { IonAccordionGroup, IonAccordion, IonItem, IonModal, ModalController } from "@ionic/angular/standalone";
 import { Observable } from 'rxjs';
 import { GroupExpense } from '../../../models/group-expense.model';
 import { CategoryIconComponent } from '../../../shared/category-icon/category-icon.component';
 import { AccountDetailComponent } from '../../../shared/account-detail/account-detail.component';
+import { ExpenseFormComponent } from '../expense-form/expense-form.component';
 
 @Component({
   selector: 'app-expense-list',
@@ -17,7 +18,17 @@ export class ExpenseListComponent {
   @ViewChild(IonModal) modal: IonModal | undefined;
   @Input() editable = false;
 
-  handleClickExpense(expenseId:string){
-    // this.router.navigate([`/expense-edit/${expenseId}`]);
+  constructor(private modalCtrl:ModalController){
+
+  }
+  async handleClickExpense(expenseId:string){
+    const modal  = await this.modalCtrl.create({
+      component : ExpenseFormComponent,
+      componentProps : {
+        isEdit : true,
+        expenseId : expenseId,
+      }
+    })
+    modal.present();
   }
 }

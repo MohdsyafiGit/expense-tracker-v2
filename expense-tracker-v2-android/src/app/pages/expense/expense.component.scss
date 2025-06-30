@@ -1,3 +1,12 @@
+.button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding:12px;
+    margin-top: 12px;
+    margin-right: 12px;
+}
+
 h3{
     text-align: left;
     padding: 0px;
@@ -23,7 +32,7 @@ ion-datetime-button::part(native) {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    color: var(--ion-color-base);
+    color: var(--ion-color-primary);
     padding: 8px 16px 8px 16px;
 }
 
