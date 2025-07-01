@@ -1,0 +1,39 @@
+<ion-header >
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <h3>Add Template</h3>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content color="primary" class="ion-padding">
+  <form [formGroup]="addTemplateFg">
+    <ion-list lines="none" lines="none" class="ion-no-padding">      
+      <ion-item color="secondary">
+        <ion-input class="custom" label="Template Title" labelPlacement="floating" placeholder="food, fuel ..." [formControl]="addTemplateFg.templateTitleFc"></ion-input>
+      </ion-item>
+      <ion-item color="secondary">
+        <ion-input class="custom" label="Expense Title" labelPlacement="floating" placeholder="food, fuel ..." [formControl]="addTemplateFg.expenseTitleFc"></ion-input>
+      </ion-item>
+      <ion-item color="secondary">
+        <ion-input type="number" class="custom" label="Price" labelPlacement="floating" placeholder="RM ..." [formControl]="addTemplateFg.priceFc"></ion-input>
+      </ion-item>
+    </ion-list>
+    <app-category-picker [categoryFormArray]="addTemplateFg.selectedCategoryIdsFc" [inputCategories$]="categories$" [multiSelect]="false" [onlyInclude]="true"></app-category-picker>
+    <app-account-picker [bankAccFormArray]="addTemplateFg.selectedBankAccIdsFc" [inputAccounts$]="bankAccounts$" [multiSelect]="false" [onlyInclude]="true"></app-account-picker>
+    <div class="toggle-container">
+      <ion-label>Set date time</ion-label>
+      <ion-toggle aria-label="View/hide chart toggle" [checked]="enableDefaultDate"
+        (ionChange)="handleDateToggleChange($event)"></ion-toggle>
+    </div>
+    @if(enableDefaultDate){
+      <div class="date-time-container">
+        <ion-datetime  id="datetime" [formControl]="addTemplateFg.dateTimeFc" color="secondary"></ion-datetime>
+      </div> 
+    }
+  </form>
+
+</ion-content>

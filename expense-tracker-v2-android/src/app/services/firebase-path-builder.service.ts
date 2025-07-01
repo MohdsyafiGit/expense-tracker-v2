@@ -70,11 +70,11 @@ export class FirebasePathBuilderService {
     }
 
     userTemplateCollectionPath(){
-        return `${FsPathEnum.templateCollRef}/${this.userId}/${FsPathEnum.filterCollRef}`;
+        return `${FsPathEnum.userCollRef}/${this.userId}/${FsPathEnum.templateCollRef}`;
     }
 
     userTemplateDocPath(templateId:string){
-        return `${FsPathEnum.templateCollRef}/${this.userId}/${FsPathEnum.filterCollRef}/${templateId}`;
+        return `${FsPathEnum.userCollRef}/${this.userId}/${FsPathEnum.templateCollRef}/${templateId}`;
     }
 
 

@@ -1,6 +1,6 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, startWith, Subject, takeUntil } from 'rxjs';
 import { AccountNormalized } from '../../models/account-normalized.model';
 import { FilterBankForm } from '../../forms/filter/filter-bank.form';
 import { FormArray } from '@angular/forms';
@@ -18,6 +18,8 @@ export class AccountPickerComponent implements OnInit, OnDestroy{
 
   @Input() inputAccounts$ : BehaviorSubject<AccountNormalized[]> | null = null;
   @Input() bankAccFormArray : FormArray<FilterBankForm> | null = null;
+  @Input() multiSelect = true;
+  @Input() onlyInclude = false;
   accounts : AccountNormalized[] = []
   accounts$ = new BehaviorSubject<AccountNormalized[]>([]);
   selectState = SelectState;
@@ -35,7 +37,10 @@ export class AccountPickerComponent implements OnInit, OnDestroy{
 
     if(this.bankAccFormArray){
       this.bankAccFormArray.valueChanges
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        startWith(this.bankAccFormArray.value),
+        takeUntil(this.destroy$)
+      )
       .subscribe((list:AccountNormalized[])=>{
         list.forEach((item)=>{
           const acc = this.accounts.find((x)=>x.accId === item.accId && x.bankId === item.bankId);
@@ -64,24 +69,28 @@ export class AccountPickerComponent implements OnInit, OnDestroy{
   handleBankSelected(bankId:string,accId:string){
     const newList = this.accounts.map((item)=> {return {...item}}); // Also fix shallow copy issue
 
-    newList.forEach((item)=>{
-      if(item.bankId === bankId && item.accId === accId) {
-        switch(item.state){
-          case SelectState.exclude:
-            item.state = SelectState.none;
-            break;
-          case SelectState.include:
-            item.state = SelectState.exclude;
-            break;
-          case SelectState.none:
-            item.state = SelectState.include;
-            break;
-          default:
-            item.state = SelectState.none;
-        }
-      }     
+    newList.forEach(item => {
+      if (item.bankId === bankId && item.accId === accId) {
+        item.state = this.updateState(item.state);
+      } else if (!this.multiSelect) {
+        item.state = SelectState.none;
+      }
     });
+    
     this.updateBankAccFormArray(newList);
+  }
+
+  updateState(currentState: SelectState): SelectState {
+    switch (currentState) {
+      case SelectState.exclude:
+        return SelectState.none;
+      case SelectState.include:
+        return this.onlyInclude ? SelectState.none : SelectState.exclude;
+      case SelectState.none:
+        return SelectState.include;
+      default:
+        return SelectState.none;
+    }
   }
 
   updateBankAccFormArray(list:AccountNormalized[]){

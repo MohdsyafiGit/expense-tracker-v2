@@ -18,7 +18,6 @@ import { FirebasePathBuilderService } from "./firebase-path-builder.service";
 import { Receipt } from "../models/receipt.model";
 import { FirebaseStorage, UploadFileOptions } from "@capacitor-firebase/storage";
 import { Template } from "../models/template.model";
-import { FsPathEnum } from "../models/firebase-path.enum";
 
 @Injectable({
     providedIn : "root"
@@ -416,13 +415,8 @@ export class ExpenseService{
     
     if(oldReceipts && oldReceipts.length > 0){
 
-      console.log(`old receipts ${oldReceipts.map((x)=>x.fileName).join(",")} , length : ${oldReceipts.length}`);
-      console.log(`new receipts ${receipts.map((x)=>x.fileName)}`);
-  
       oldReceipts.forEach(async (x)=>{
         const res = receipts.find((y)=>y.fileName === x.fileName)
-  
-        console.log(`result when trying to find ${x.fileName} : ${res}`);
   
         if(!res){
           await FirebaseStorage.deleteFile({
@@ -462,7 +456,7 @@ export class ExpenseService{
 
     receipts.forEach(async (x)=>{
       if(!receiptLists.find((y=>y === x.fileName))){
-        this.uploadReceipt(x,FsPathEnum.receiptsStorageFolder);
+        this.uploadReceipt(x);
       }
     })
   }
@@ -486,11 +480,11 @@ export class ExpenseService{
     });
 
     receipts.forEach((receipt)=>{
-      this.uploadReceipt(receipt,FsPathEnum.receiptsStorageFolder);
+      this.uploadReceipt(receipt);
     })
   }
 
-  async uploadReceipt(file: Receipt, folder: string): Promise<string> {
+  async uploadReceipt(file: Receipt): Promise<string> {
     const fileOption: UploadFileOptions = {
         path: this.path.userReceiptPath(file.fileName),
         uri: file.androidUri,

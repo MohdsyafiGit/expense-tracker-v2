@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonButton, IonButtons, IonToolbar, IonHeader, IonItem,  IonList, IonCard, IonInput, IonIcon, IonPicker, IonModal, IonPickerColumnOption, IonPickerColumn, ModalController, IonLabel } from "@ionic/angular/standalone";
+import { IonContent, IonButton, IonButtons, IonToolbar, IonHeader, IonItem,  IonList, IonCard, IonIcon, IonPicker, IonModal, IonPickerColumnOption, IonPickerColumn, ModalController, IonLabel } from "@ionic/angular/standalone";
 import { Filter } from '../../models/filter.model';
 import { FilterForm } from '../../forms/filter/filter.form';
 import { BehaviorSubject, debounceTime, Subject, takeUntil } from 'rxjs';
@@ -30,7 +30,7 @@ import { SelectAccountId } from '../../models/select-account-id.model';
   selector: 'app-filter-picker',
   imports: [IonLabel, 
     IonModal, IonPicker, IonIcon, 
-    IonInput, IonCard, IonList, 
+    IonCard, IonList, 
     IonItem,  IonHeader, IonToolbar, IonButtons, IonButton, 
     IonContent, CommonModule, ReactiveFormsModule, CategoryPickerComponent,
     AccountPickerComponent, DateRangePickerComponent, IonPickerColumn,

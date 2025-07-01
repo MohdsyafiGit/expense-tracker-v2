@@ -5,7 +5,7 @@ import { SelectCategory } from '../../models/select-category.model';
 import { SelectState } from '../../models/select-state.enum';
 import { FilterCategoryForm } from '../../forms/filter/filter-category.form';
 import { FormArray } from '@angular/forms';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, startWith, Subject, takeUntil } from 'rxjs';
 
 @Component({
   schemas :[CUSTOM_ELEMENTS_SCHEMA],
@@ -18,6 +18,8 @@ export class CategoryPickerComponent implements OnInit , OnDestroy{
 
   @Input() inputCategories$ : BehaviorSubject<SelectCategory[]> | null = null;
   @Input() categoryFormArray : FormArray<FilterCategoryForm> | null = null;
+  @Input() multiSelect = true;
+  @Input() onlyInclude = false;
   categories : SelectCategory[] = []
   categories$ = new BehaviorSubject<SelectCategory[]>([]);
   selectState = SelectState;
@@ -35,7 +37,9 @@ export class CategoryPickerComponent implements OnInit , OnDestroy{
 
     if(this.categoryFormArray){
       this.categoryFormArray?.valueChanges
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        startWith(this.categoryFormArray.value),
+        takeUntil(this.destroy$))
       .subscribe((list :{catId:string,state:SelectState}[])=>{
 
         list.forEach((item)=>{
@@ -62,29 +66,31 @@ export class CategoryPickerComponent implements OnInit , OnDestroy{
     }
   }
 
-  handleCategorySelected(catId:string){
-    const newList = this.categories.map(item => {return {...item}});
+  handleCategorySelected(catId: string) {
+    const newList = this.categories.map(item => ({ ...item }));
+    
+    newList.forEach(item => {
+      if (item.category.id === catId) {
+        item.state = this.updateState(item.state);
+      } else if (!this.multiSelect) {
+        item.state = SelectState.none;
+      }
+    });
+    
+    this.updateCategoryFormArray(newList);
+  }
 
-      newList.forEach((item)=>{
-        if(item.category.id === catId)
-        {
-          switch(item.state){
-            case SelectState.exclude:
-              item.state = SelectState.none;
-              break;
-            case SelectState.include:
-              item.state = SelectState.exclude;
-              break;
-            case SelectState.none:
-              item.state = SelectState.include;
-              break;
-            default:
-              item.state = SelectState.none;
-          }
-        }
-      });
-
-      this.updateCategoryFormArray(newList);
+  updateState(currentState: SelectState): SelectState {
+    switch (currentState) {
+      case SelectState.exclude:
+        return SelectState.none;
+      case SelectState.include:
+        return this.onlyInclude ? SelectState.none : SelectState.exclude;
+      case SelectState.none:
+        return SelectState.include;
+      default:
+        return SelectState.none;
+    }
   }
 
   updateCategoryFormArray(input:SelectCategory[]){

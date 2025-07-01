@@ -1,6 +1,6 @@
-import { Component, OnDestroy, output } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonInput, IonItem, IonList, IonCard, IonCardHeader, IonLabel, IonRadio, IonRadioGroup } from "@ionic/angular/standalone";
+import { IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonInput, IonItem, IonList, IonCard, IonCardHeader, IonLabel, IonRadio, IonRadioGroup, ModalController } from "@ionic/angular/standalone";
 import { FilterForm } from '../../../forms/filter/filter.form';
 import {  ReactiveFormsModule } from '@angular/forms';
 import { CategoryPickerComponent } from "../../../shared/category-picker/category-picker.component";
@@ -39,13 +39,12 @@ export class AddFilterComponent implements OnDestroy{
   monthModifiers: ValueLabel[] = [];
   daysInMonth : { value: number; label: string }[] = []
   destroy$ = new Subject<void>();
-  confirmClick = output();
-  cancelClick = output();
   constructor(
     private categoryService : CategoryService,
     private bankService : BankService,
     private filterService : FilterService,
-    private loadingService : LoadingService){
+    private loadingService : LoadingService,
+    private modalCtrl : ModalController){
 
     this.categoryService.categories$
       .pipe(
@@ -80,7 +79,7 @@ export class AddFilterComponent implements OnDestroy{
     }
   }
   cancel(){
-    this.cancelClick.emit();
+    this.modalCtrl.dismiss();
   }
 
   async confirm(){
@@ -119,7 +118,7 @@ export class AddFilterComponent implements OnDestroy{
 
       await this.filterService.saveFilter(filter)
       await this.loadingService.endLoading();
-      this.confirmClick.emit();
+      this.modalCtrl.dismiss();
     }catch(err){
       console.error(err);
       this.loadingService.endLoading();

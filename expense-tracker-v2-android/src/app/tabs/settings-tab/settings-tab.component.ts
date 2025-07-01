@@ -7,14 +7,17 @@ import { CategoryListComponent } from '../../pages/category-list/category-list.c
 import { AuthService } from '../../services/auth.service';
 import { logOutOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+import { TemplateListComponent } from "../../pages/template-list/template-list.component";
 
 @Component({
   selector: 'app-settings-tab',
   imports: [
-    IonButton, IonIcon, IonButtons, IonLabel, IonSegment, 
-    IonSegmentButton, IonContent, IonToolbar, IonTitle, 
-    IonHeader, CommonModule, IonSegmentView, IonSegmentContent, 
-    CategoryListComponent, BankListComponent, FilterListComponent],
+    IonButton, IonIcon, IonButtons, IonLabel, IonSegment,
+    IonSegmentButton, IonContent, IonToolbar, IonTitle,
+    IonHeader, CommonModule, IonSegmentView, IonSegmentContent,
+    CategoryListComponent, BankListComponent, FilterListComponent,
+    TemplateListComponent
+],
   templateUrl: './settings-tab.component.html',
   styleUrl: './settings-tab.component.scss',
 })

@@ -1,6 +1,6 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonInput, IonItem, IonList, IonCard, IonCardHeader, IonLabel, IonRadio, IonRadioGroup } from "@ionic/angular/standalone";
+import { IonHeader, IonToolbar, IonButtons, IonButton, IonContent, IonInput, IonItem, IonList, IonCard, IonCardHeader, IonLabel, IonRadio, IonRadioGroup, ModalController } from "@ionic/angular/standalone";
 import { FilterForm } from '../../../forms/filter/filter.form';
 import {  ReactiveFormsModule } from '@angular/forms';
 import { CategoryPickerComponent } from "../../../shared/category-picker/category-picker.component";
@@ -33,8 +33,8 @@ import { FilterBankForm } from '../../../forms/filter/filter-bank.form';
   templateUrl: './edit-filter.component.html',
   styleUrl: './edit-filter.component.scss',
 })
-export class EditFilterComponent implements OnDestroy {
-  filterToEdit!: Filter;
+export class EditFilterComponent implements OnDestroy, OnInit {
+  @Input() filterToEdit!: Filter;
   editFilterFg : FilterForm = new FilterForm();
   categories$  = new BehaviorSubject<SelectCategory[]>([]);
   bankAccounts$  = new BehaviorSubject<AccountNormalized[]>([]);
@@ -46,7 +46,8 @@ export class EditFilterComponent implements OnDestroy {
     private categoryService : CategoryService,
     private bankService : BankService,
     private filterService : FilterService,
-    private loadingService : LoadingService){
+    private loadingService : LoadingService,
+    private modalCtrl:ModalController){
 
     this.categoryService.categories$
       .pipe(
@@ -73,9 +74,11 @@ export class EditFilterComponent implements OnDestroy {
     this.dateModes$.next(this.filterService.dateModes);
     this.monthModifiers = this.filterService.monthModifiers;
     this.daysInMonth = this.filterService.daysInMonth;
+  }
 
-    this.filterService.getFilterToEdit().then((res)=>{
-      this.filterToEdit = res;
+  ngOnInit(): void {
+    
+    if(this.filterToEdit){
       this.editFilterFg.idFc.setValue(this.filterToEdit.id);
       this.editFilterFg.titleFc.setValue(this.filterToEdit.title);
       this.editFilterFg.isDefaultFilterFc.setValue(this.filterToEdit.isDefaultFilter);
@@ -86,16 +89,14 @@ export class EditFilterComponent implements OnDestroy {
       this.editFilterFg.dateRangeFg.customMonthRangeFg.endFc.setValue(this.filterToEdit.customMonthEnd ?? 30);
       this.editFilterFg.dateRangeFg.customMonthRangeFg.startModifierFc.setValue(this.filterToEdit.customMonthStartModifier ?? "");
       this.editFilterFg.dateRangeFg.customMonthRangeFg.endModifierFc.setValue(this.filterToEdit.customMonthEndModifier ?? "");
-
+      
       this.filterToEdit.selectedCategoryIds.forEach((item)=>{
         this.editFilterFg.selectedCategoryIdsFc.push(new FilterCategoryForm(item.catId,item.state));
       })
       this.filterToEdit.selectedBankAccIds.forEach((item)=>{
         this.editFilterFg.selectedBankAccIdsFc.push(new FilterBankForm(item.bankId,item.accId,item.state));
       });
-
-    });
-
+    }
   }
   ngOnDestroy(): void {
     if(this.destroy$){
@@ -104,7 +105,7 @@ export class EditFilterComponent implements OnDestroy {
     }
   }
   cancel(){
-    this.filterService.dismissEditFilterModal$.next();
+    this.modalCtrl.dismiss();
   }
 
   async confirm(){
@@ -145,7 +146,7 @@ export class EditFilterComponent implements OnDestroy {
 
       await this.filterService.updateFilter(filter)
       await this.loadingService.endLoading();
-      this.filterService.dismissEditFilterModal$.next();
+      this.modalCtrl.dismiss();
     }catch(err){
       console.error(err);
       this.loadingService.endLoading();

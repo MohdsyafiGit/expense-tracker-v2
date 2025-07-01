@@ -7,19 +7,18 @@ import {
   IonButtons, IonCard, IonCardHeader, IonCardContent, 
   IonIcon, IonList, IonItem, IonInput, IonSelect, IonSelectOption, IonDatetime, 
    IonModal, IonButton, IonAccordionGroup,IonAccordion, 
-   ModalController, IonDatetimeButton} from '@ionic/angular/standalone';
-import { ActivatedRoute, Router } from '@angular/router';
+   ModalController} from '@ionic/angular/standalone';
+import {  Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { returnUpBack, add, camera, document, eye, trash, saveOutline } from 'ionicons/icons';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { LocationStrategy } from '@angular/common';
 import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoElementPredicate, MaskitoOptions } from '@maskito/core';
 import { PdfJsViewerModule } from "ng2-pdfjs-viewer"; 
 import { Camera, CameraResultType, Photo } from '@capacitor/camera';
 import { v4 as UUID } from 'uuid';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { PhotoViewer } from '@capacitor-community/photoviewer';
+import { capShowResult, PhotoViewer } from '@capacitor-community/photoviewer';
 import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { BankImgComponent } from '../../../shared/bank-img/bank-img.component';
@@ -30,6 +29,7 @@ import { ExpenseService } from '../../../services/expense.service';
 import { Template } from '../../../models/template.model';
 import { CategoryService } from '../../../services/category.service';
 import { Receipt } from '../../../models/receipt.model';
+import { IonSelectCustomEvent, SelectChangeEventDetail } from '@ionic/core';
 
 @Component({
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
@@ -78,7 +78,7 @@ export class ExpenseFormComponent implements OnInit {
   readonly priceMask: MaskitoOptions = {
 	  mask: /^\d+(\.\d{0,2})?$/, // digits and comma (as decimal separator)
     preprocessors: [
-      ({elementState, data}, actionType) => {
+      ({elementState, data}) => {
         const {value, selection} = elementState;
         
         const strValue =  value.toString();
@@ -92,7 +92,7 @@ export class ExpenseFormComponent implements OnInit {
       },
     ],
     postprocessors: [
-      ({value, selection}, initialElementState) => {
+      ({value, selection}) => {
         if (value.includes('.')) {
           // Ensure 2 decimal places by padding zeroes if needed
           const [integer, decimals] = value.split('.');
@@ -132,8 +132,6 @@ export class ExpenseFormComponent implements OnInit {
           const result = await this.expenseService.getReceipts(res.receipts);
           this.receipts = result;
           this.receipts$.next(this.receipts);
-
-          console.log(this.receipts);
         }
       }
 
@@ -172,11 +170,11 @@ export class ExpenseFormComponent implements OnInit {
     this.goBack();
   }
 
-  async handleCategoryChange(selectedCatEvent:any){
+  async handleCategoryChange(selectedCatEvent:IonSelectCustomEvent<SelectChangeEventDetail<string>>){
     this.selectedCategoryIcon = await this.categoryService.getCategoryIconName(selectedCatEvent.target.value);
   }
 
-  handleBankChange(selectedBankEvent:any){
+  handleBankChange(selectedBankEvent:IonSelectCustomEvent<SelectChangeEventDetail<string>>){
     const picName = this.bankService.getBankPicName(selectedBankEvent.target.value);
     this.selectedBankPic = picName;
   }
@@ -190,7 +188,7 @@ export class ExpenseFormComponent implements OnInit {
     }
   }
 
-  handleTemplateChange(selectedTemplateEvent:any){
+  handleTemplateChange(selectedTemplateEvent:IonSelectCustomEvent<SelectChangeEventDetail<string>>){
 
     if(!this.templates || this.templates.length <= 0)
       return;
@@ -232,17 +230,32 @@ export class ExpenseFormComponent implements OnInit {
     });
 
     const savedFile = await this.savePicture(image);
-    this.receipts.push(savedFile);
+
+    if(savedFile)
+      this.receipts.push(savedFile);
+
     this.receipts$.next(this.receipts);
 
   };
   
   private async savePicture(photo: Photo) {
-    const response = await fetch(photo.webPath!);
-    const blob = await response.blob();
-    const fileName = UUID() + '.' + photo.format;
+    if(photo){
+      let url = "";
 
-    return {fileName:fileName,fileBlob:blob,androidUri:photo.path,webPath:photo.webPath,isPdf:false} as Receipt;
+      if(photo.webPath)
+        url = photo.webPath;
+
+      if(!url)
+        return undefined
+
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const fileName = UUID() + '.' + photo.format;
+
+      return {fileName:fileName,fileBlob:blob,androidUri:photo.path,webPath:photo.webPath,isPdf:false} as Receipt;
+    }
+
+    return undefined;
   }
 
   async onFileChange(event: Event) {
@@ -339,25 +352,36 @@ export class ExpenseFormComponent implements OnInit {
       return;
     }
 
-    const echo = await PhotoViewer.show({
-      images: [{
-        url:  urlString,
-        title: receipt.fileName,
+    let echo : capShowResult | undefined = undefined
+    try{
+       echo = await PhotoViewer.show({
+        images: [{
+          url:  urlString,
+          title: receipt.fileName,
 
-      }],
-      mode: 'one',
-      
-    })
+        }],
+        mode: 'one',
+        
+      })
 
-    const eventListener = await (PhotoViewer as any).addListener('jeepCapPhotoViewerExit', (eventData: any) => 
-    {
-      this.closeModal();
-      console.log(eventData);
-    });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (PhotoViewer as any).addListener('jeepCapPhotoViewerExit', () => 
+      {
+        this.closeModal();
+      });
+
+    }catch(err){
+      console.error(err);
+      console.log(echo?.result);
+      this.alertMsg = "Error, unable to load image viewer"
+      this.isAlertOpen = true;
+      return;
+
+    }
+
   }
 
   closeModal(){
-    console.log(this.modal);
     if(this.modal){
       const modal = this.modal.nativeElement as IonModal;
       modal.dismiss();

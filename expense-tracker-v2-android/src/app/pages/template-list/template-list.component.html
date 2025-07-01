@@ -1,19 +1,19 @@
 <div class="button-container">
-  <ion-button (click)="handleAddFilterClick()" fill="solid" id="new-filter" color="tertiary" shape="round">
+  <ion-button (click)="handleAddTemplateClick()" fill="solid" id="new-filter" color="tertiary" shape="round">
     <ion-label>Add</ion-label>
     <ion-icon name="add-outline" slot="end"></ion-icon>
   </ion-button>
 </div>
 
 <ion-grid class="ion-padding">
-  @for(filter of (filterList$ | async);let i = $index ;track i){
+  @for(template of (templateList$ | async);let i = $index ;track i){
     <ion-row color="tertiary">
-      <ion-col (click)="handleEditFilterClick(filter.id)" class="filter-title">
-        <ion-label>{{filter.title}}</ion-label>
+      <ion-col (click)="handleEditTemplateClick(template.id)" class="filter-title">
+        <ion-label>{{template.templateTitle}}</ion-label>
       </ion-col>
       <ion-col size="auto" class="filter-delete-button">        
         <div>
-          <ion-button color="secondary" slot="end" shape="round" (click)="handleDeleteFilter(filter.id)">
+          <ion-button color="secondary" slot="end" shape="round" (click)="handleDeleteTemplate(template.id)">
             <ion-icon  slot="icon-only" name="trash" color="danger" ></ion-icon>
           </ion-button>
         </div>

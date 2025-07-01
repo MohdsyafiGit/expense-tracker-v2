@@ -1,0 +1,21 @@
+h3{
+    text-align: center;
+    padding: 12px;
+    font-size: 18px;
+    margin: 0px;
+}
+
+.date-time-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+    align-items: center;
+    padding: 8px;
+}
