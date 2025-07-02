@@ -17,7 +17,6 @@ import { CategoryWithTotal } from "../models/category-with-total.model";
 import { FirebasePathBuilderService } from "./firebase-path-builder.service";
 import { Receipt } from "../models/receipt.model";
 import { FirebaseStorage, UploadFileOptions } from "@capacitor-firebase/storage";
-import { Template } from "../models/template.model";
 
 @Injectable({
     providedIn : "root"
@@ -388,26 +387,6 @@ export class ExpenseService{
     return result;
   }
 
-  getTemplatesObservable(){
-    const sub = new BehaviorSubject<Template[]>([]);
-
-    FirebaseFirestore.addCollectionSnapshotListener<Template>(
-      {
-        reference: this.path.userTemplateCollectionPath()
-      },
-      (event, error) => {
-        if (error) {
-          console.error(error);
-        } else if (event) {
-          const templates = event.snapshots.map((item) => ({...item.data, id: item.id} as Template));
-          sub.next(templates);
-        }
-      }
-    );
-
-    return sub.asObservable();
-  }
-
   async updateExpense(expense: Expense,receipts:Receipt[]) {
     const docRef = this.path.userExpensesDocPath(expense.id);
 
@@ -452,11 +431,9 @@ export class ExpenseService{
       return x.name;
     })
 
-    console.log(receiptLists);
-
     receipts.forEach(async (x)=>{
       if(!receiptLists.find((y=>y === x.fileName))){
-        this.uploadReceipt(x);
+        await this.uploadReceipt(x);
       }
     })
   }

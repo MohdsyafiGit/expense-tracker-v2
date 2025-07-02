@@ -11,7 +11,7 @@ import {
 import {  Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { returnUpBack, add, camera, document, eye, trash, saveOutline } from 'ionicons/icons';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoElementPredicate, MaskitoOptions } from '@maskito/core';
 import { PdfJsViewerModule } from "ng2-pdfjs-viewer"; 
@@ -30,6 +30,8 @@ import { Template } from '../../../models/template.model';
 import { CategoryService } from '../../../services/category.service';
 import { Receipt } from '../../../models/receipt.model';
 import { IonSelectCustomEvent, SelectChangeEventDetail } from '@ionic/core';
+import { TemplateService } from '../../../services/template.service';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
@@ -52,7 +54,7 @@ export class ExpenseFormComponent implements OnInit {
   @Input() expenseId  = "";
   $categories  = new  Observable<Category[]>();
   $banks   = new Observable<Bank[]>();
-  $templates  = new Observable<Template[]>();
+  templates$  = new Observable<Template[]>();
   title = "";
   price = 0.00;
   selectedCategoryId = "";
@@ -61,7 +63,6 @@ export class ExpenseFormComponent implements OnInit {
   selectedBankPic = "";
   txnDateTime  = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16);
   selectedTemplateId = "";
-  templates : Template[] = [];
   readonly maskPredicate: MaskitoElementPredicate = async (el) => (el as HTMLIonInputElement).getInputElement();
   receipts : Receipt[] = [];
   receipts$ : BehaviorSubject<Receipt[]> = new BehaviorSubject<Receipt[]>([]);
@@ -116,7 +117,9 @@ export class ExpenseFormComponent implements OnInit {
     private categoryService : CategoryService,
     private bankService : BankService,
     private router:Router,
-    private modalController: ModalController) { 
+    private modalController: ModalController,
+    private templateService: TemplateService,
+    private loadingService : LoadingService) { 
     addIcons({returnUpBack,saveOutline,document,camera,trash,eye,add});
   }
 
@@ -146,27 +149,25 @@ export class ExpenseFormComponent implements OnInit {
       this.txnDateTime  = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16);
     }
 
-    this.$templates =  this.expenseService.getTemplatesObservable().pipe(
-      tap((list)=>{
-        this.templates = list;
-    }));
-
+    this.templates$ =  this.templateService.templates$
     this.$categories = this.categoryService.categories$;
     this.$banks = this.bankService.banks$;
 
   }
 
-  handleSave(){
+  async handleSave(){
+    await this.loadingService.beginLoading();
     const bankId = this.bankService.getBankId(this.selectedAccountId);
     const expense: Expense = new Expense(this.title,+this.price,this.selectedCategoryId,bankId,this.selectedAccountId,this.txnDateTime);
 
     if(!this.isEdit)
-      this.expenseService.addExpense(expense,this.receipts);
+      await this.expenseService.addExpense(expense,this.receipts);
     else{
       expense.id = this.expenseId;
-      this.expenseService.updateExpense(expense,this.receipts);
+      await this.expenseService.updateExpense(expense,this.receipts);
     }
 
+    await this.loadingService.endLoading();
     this.goBack();
   }
 
@@ -188,12 +189,9 @@ export class ExpenseFormComponent implements OnInit {
     }
   }
 
-  handleTemplateChange(selectedTemplateEvent:IonSelectCustomEvent<SelectChangeEventDetail<string>>){
+  async handleTemplateChange(selectedTemplateEvent:IonSelectCustomEvent<SelectChangeEventDetail<string>>){
 
-    if(!this.templates || this.templates.length <= 0)
-      return;
-
-    const res = this.templates.find((item)=>item.id === selectedTemplateEvent.target.value);
+    const res = await this.templateService.getTemplateDetail(selectedTemplateEvent.target.value);
 
     if(!res)
       return
@@ -344,7 +342,7 @@ export class ExpenseFormComponent implements OnInit {
 
   async clickImage(receipt:Receipt) {
     
-    const urlString = receipt.firebaseUrl.toString() ?? receipt.webPath
+    const urlString = receipt.firebaseUrl ?? receipt.webPath
 
     if(!urlString){
       this.alertMsg = "Error, unable to load image viewer"

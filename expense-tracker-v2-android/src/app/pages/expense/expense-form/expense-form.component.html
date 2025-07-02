@@ -23,7 +23,7 @@
       [(ngModel)]="selectedTemplateId"
       (ionChange)="handleTemplateChange($event)"
       label-placement="stacked">
-      <ng-container *ngFor="let item of ( $templates | async )">
+      <ng-container *ngFor="let item of ( templates$ | async )">
         <ion-select-option class="custom-select-option" value="{{item.id}}">{{item.templateTitle}}</ion-select-option>
       </ng-container>
     </ion-select>
