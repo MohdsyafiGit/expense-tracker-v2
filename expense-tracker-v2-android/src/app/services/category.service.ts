@@ -133,4 +133,12 @@ export class CategoryService {
     else
       return '';
   }
+
+  async getCategoryDetailOffline(id: string): Promise<Category | undefined>{
+    if(this.categories.length > 0 && this.categories.find((cat)=>cat.id === id)){
+      return this.categories.find((cat)=>cat.id === id)
+    } else{
+      return await this.getCategoryDetail(id);
+    }
+  }
 }

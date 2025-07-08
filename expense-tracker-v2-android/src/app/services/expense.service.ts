@@ -128,22 +128,30 @@ export class ExpenseService{
         break;
 
       case "customMonthRange":
-        startDay = filter.customMonthStart;
-        endDay = filter.customMonthEnd;
-   
-        if(filter.customMonthStartModifier === "lastMonth")
-          startMonth -= 1;
-    
-        if(filter.customMonthEndModifier === "lastMonth")
-          endMonth -= 1;
+        {
+          startDay = filter.customMonthStart;
+          endDay = filter.customMonthEnd;
 
-           
-        if(filter.customMonthStartModifier === "nextMonth")
-          startMonth += 1;
-    
-        if(filter.customMonthEndModifier === "nextMonth")
-          endMonth += 1;
+          if(filter.customMonthStartModifier === "lastMonth")
+            startMonth -= 1;
+      
+          if(filter.customMonthEndModifier === "lastMonth")
+            endMonth -= 1;
 
+            
+          if(filter.customMonthStartModifier === "nextMonth")
+            startMonth += 1;
+      
+          if(filter.customMonthEndModifier === "nextMonth")
+            endMonth += 1;
+
+          const year = dayjs().year();
+          const lastDayNumber = dayjs().year(year).month(endMonth).endOf('month').date();
+
+          if(endDay > lastDayNumber){
+            endDay = lastDayNumber;
+          }
+        }
         break;
 
       case "currentWeek":{ 

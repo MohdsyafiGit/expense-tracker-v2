@@ -203,7 +203,7 @@ export class FilterPickerComponent implements OnDestroy,OnInit {
     this.filterFg.titleFc.setValue(this.currentFilter.title);
     this.filterFg.isDefaultFilterFc.setValue(this.currentFilter.isDefaultFilter);
     this.filterFg.dateRangeFg.startDateFc.setValue(this.currentFilter.startDate ?? "");
-    this.filterFg.dateRangeFg.endDateFc.setValue(this.currentFilter.startDate ?? "");
+    this.filterFg.dateRangeFg.endDateFc.setValue(this.currentFilter.endDate ?? "");
     this.filterFg.dateRangeFg.dateModeFc.setValue(this.currentFilter.dateMode ?? "");
     this.filterFg.dateRangeFg.customMonthRangeFg.startFc.setValue(this.currentFilter.customMonthStart ?? 1);
     this.filterFg.dateRangeFg.customMonthRangeFg.endFc.setValue(this.currentFilter.customMonthEnd ?? 30);
