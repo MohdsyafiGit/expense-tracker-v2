@@ -1,5 +1,5 @@
 import { DashboardService } from './../../../services/dashboard.service';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Chart } from 'chart.js';
 import { ChartData } from '../../../models/line-chart-data.model';
@@ -12,7 +12,7 @@ import { ChartDataset } from '../../../models/chart-data.model';
   templateUrl: './monthly-total-spent.component.html',
   styleUrl: './monthly-total-spent.component.scss',
 })
-export class MonthlyTotalSpentComponent implements OnDestroy {
+export class MonthlyTotalSpentComponent implements OnDestroy , OnInit {
   monthlyTotalSpentChart : Chart<"bar"> | null = null;
   chartId = "monthly-spent-trend";
   barChartData = new ChartData();
@@ -24,7 +24,10 @@ export class MonthlyTotalSpentComponent implements OnDestroy {
     .pipe(takeUntil(this.destroy$))
     .subscribe((expenses)=>{
 
+      this.barChartData = new ChartData();
       if(expenses.length > 0){
+        this.barChartData.datasets = [];
+        this.barChartData.labels = [];
         this.barChartData.labels = expenses.map((item)=> this.dashboardService.getMonthName(item.month));
         this.barChartData.datasets.push(
           new ChartDataset(
@@ -32,10 +35,16 @@ export class MonthlyTotalSpentComponent implements OnDestroy {
             expenses.map(item => {return item.total}),
             this.dashboardService.chartColors[0],
             this.dashboardService.chartColors[0]));
-
-        this.createChart();
+        this.updateChart();
+      }else{
+        this.barChartData = new ChartData();
+        this.monthlyTotalSpentChart?.reset();
+        this.updateChart();
       }
     })
+  }
+  ngOnInit(): void {
+    this.createChart();
   }
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -44,10 +53,10 @@ export class MonthlyTotalSpentComponent implements OnDestroy {
 
   createChart(
   ) {
-    const chartExist = Chart.getChart(this.chartId);
-    if (chartExist != undefined) chartExist.destroy();
 
-    return new Chart(this.chartId, {
+    this.removeChartIfExist();
+
+    this.monthlyTotalSpentChart =  new Chart(this.chartId, {
       type: 'bar',
       data: this.barChartData,
       options: {
@@ -80,5 +89,20 @@ export class MonthlyTotalSpentComponent implements OnDestroy {
         aspectRatio: 1.5,
       },
     });
+  }
+
+  updateChart(){
+    const chartExist = Chart.getChart(this.chartId);
+    if(chartExist && this.monthlyTotalSpentChart){
+      this.monthlyTotalSpentChart.data = this.barChartData;
+      this.monthlyTotalSpentChart.update();
+    }else{
+      this.createChart();
+    }
+  }
+
+  removeChartIfExist(){
+    const chartExist = Chart.getChart(this.chartId);
+    if (chartExist != undefined) chartExist.destroy();
   }
 }

@@ -27,24 +27,32 @@ export class DashboardService {
     this.authService.user$.subscribe((user)=>{
       if(user){
         this.getExpenses();
-
-        this.expenses$
-        .subscribe((expenses)=>{
-          const groupByCatExpense = this.getExpensesGroupByCategories(expenses);
-          if(groupByCatExpense){
-            groupByCatExpense.forEach((groupExpense)=>{
-              const groupByMonth = this.groupAndGetTotalByMonth(groupExpense.expenses)
-              groupExpense.totalExpenseByMonthList = groupByMonth;
-            })
-          }
-          this.groupByCatExpenses$.next(groupByCatExpense);
-
-          const groupByMonthlyTotalExpense  = this.groupAndGetTotalByMonth(expenses);
-          this.groupByMonthTotalExpenses$.next(groupByMonthlyTotalExpense);
-        })
-      }   
+      }else{
+        this.expenses = [];
+        this.expenses$.next(this.expenses);
+      }
     })
 
+    this.expenses$
+    .subscribe((expenses)=>{
+      if(expenses.length > 0){
+        const groupByCatExpense = this.getExpensesGroupByCategories(expenses);
+        if(groupByCatExpense){
+          groupByCatExpense.forEach((groupExpense)=>{
+            const groupByMonth = this.groupAndGetTotalByMonth(groupExpense.expenses)
+            groupExpense.totalExpenseByMonthList = groupByMonth;
+          })
+        }
+        this.groupByCatExpenses$.next(groupByCatExpense);
+
+        const groupByMonthlyTotalExpense  = this.groupAndGetTotalByMonth(expenses);
+        this.groupByMonthTotalExpenses$.next(groupByMonthlyTotalExpense);
+      }else{
+        this.groupByCatExpenses$.next([]);
+        this.groupByMonthTotalExpenses$.next([]);
+      }
+
+    })
 
   }
 
@@ -55,7 +63,7 @@ export class DashboardService {
     const startDate = new Date(now.getFullYear(), currentMonth - 6, 1);
     const startOfDaylocalISODate = new Date(startDate.getTime() - startDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
     
-    const endDate = new Date(now.getFullYear(), currentMonth, 0);
+    const endDate = new Date(now.getFullYear(), currentMonth + 1, 0);
     endDate.setHours(23, 59, 59, 999);
     const endOfDaylocalISODate = new Date(endDate.getTime() - endDate.getTimezoneOffset() * 60000).toISOString();
 
@@ -83,6 +91,8 @@ export class DashboardService {
     (event, error) => {
       if (error) {
         console.error(error);
+        this.expenses = [];
+        this.expenses$.next(this.expenses);
       } else if(event){
           const list: Expense[] = event.snapshots.map(
             (item) => ({ ...item.data, id: item.id }) as Expense
@@ -98,6 +108,12 @@ export class DashboardService {
       return [];
 
     const expensesGrouped = expenses.reduce((groups, expense) => {
+
+      if(!expense ||  !expense.catId){
+        console.error("getExpensesGroupByCategories error : cat id is null " + " expense id : " + expense?.id);
+        return groups
+      }
+
       const catId = expense.catId;
   
       let group = groups.find((g) => g.catId === catId);
@@ -110,6 +126,7 @@ export class DashboardService {
       group.expenses.push(expense);
       group.total += expense.price;
       group.averageTotalOver6Month = group.total/6;
+
       return groups;
     }, [] as GroupCategoryExpense[]);
   
@@ -183,5 +200,5 @@ export class DashboardService {
         default:
           return ""
       }
-    }
+  }
 }
