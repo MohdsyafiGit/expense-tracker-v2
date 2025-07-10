@@ -1,23 +1,36 @@
 .date-time-container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .accordion-slot{
-    background-color: var(--ion-color-tertiary);
-    height: 450px;
+  background-color: var(--ion-color-tertiary);
+  height: 450px;
 }
 
 img{
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 h3{
-    text-align: center;
-    padding: 12px;
-    font-size: 18px;
-    margin: 0px;
+  text-align: center;
+  padding: 12px;
+  font-size: 18px;
+  margin: 0px;
+}
+
+.custom-input{
+  border:none;
+  background-color: var(--ion-color-secondary);
+  color: var(--ion-color-light);
+  margin: 0;
+  padding: 0;
+}
+
+.custom-input:focus{
+  border:none;
+  outline: none;
 }

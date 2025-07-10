@@ -34,7 +34,8 @@
       <ion-input class="custom" label="Title" labelPlacement="floating" placeholder="food, fuel ..." [(ngModel)]="title"></ion-input>
     </ion-item>
     <ion-item color="secondary">
-      <ion-input  [maskitoElement]="maskPredicate"  [maskito]="priceMask" class="custom" label="Price" labelPlacement="floating" placeholder="RM ..." [(ngModel)]="price"></ion-input>
+      <input class="custom-input" type="text" currencyMask [options]="currencyOptions" [(ngModel)]="price" />
+      <!-- <ion-input currencyMask [options]="currencyOptions" class="custom" label="Price" labelPlacement="floating" placeholder="RM ..." [(ngModel)]="price"></ion-input> -->
     </ion-item>
     <ion-item color="secondary">
       @if(selectedCategoryIcon){

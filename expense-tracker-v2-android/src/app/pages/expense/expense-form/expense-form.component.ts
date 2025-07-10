@@ -12,7 +12,6 @@ import {  Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { returnUpBack, add, camera, document, eye, trash, saveOutline } from 'ionicons/icons';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoElementPredicate, MaskitoOptions } from '@maskito/core';
 import { PdfJsViewerModule } from "ng2-pdfjs-viewer"; 
 import { Camera, CameraResultType, Photo } from '@capacitor/camera';
@@ -32,6 +31,7 @@ import { Receipt } from '../../../models/receipt.model';
 import { IonSelectCustomEvent, SelectChangeEventDetail } from '@ionic/core';
 import { TemplateService } from '../../../services/template.service';
 import { LoadingService } from '../../../services/loading.service';
+import { NgxCurrencyDirective } from "ngx-currency";
 
 @Component({
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
@@ -39,12 +39,12 @@ import { LoadingService } from '../../../services/loading.service';
   templateUrl: './expense-form.component.html',
   styleUrls: ['./expense-form.component.scss'],
   standalone: true,
-  imports: [IonAccordionGroup, 
-    IonTitle, IonToolbar, IonHeader, FormsModule,IonAccordion,
+  imports: [
+    IonAccordionGroup, IonTitle, IonToolbar, IonHeader, FormsModule,IonAccordion,
     IonContent, IonButtons, IonCard,IonCardHeader,IonCardContent,
     IonIcon, IonList, IonItem, IonInput, PdfJsViewerModule, IonLabel,
     IonSelect, IonSelectOption, IonDatetime, CommonModule, ReactiveFormsModule,
-    IonButton, BankImgComponent, MaskitoDirective]
+    IonButton, BankImgComponent, NgxCurrencyDirective]
 })
 export class ExpenseFormComponent implements OnInit {
 
@@ -63,11 +63,9 @@ export class ExpenseFormComponent implements OnInit {
   selectedBankPic = "";
   txnDateTime  = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16);
   selectedTemplateId = "";
-  readonly maskPredicate: MaskitoElementPredicate = async (el) => (el as HTMLIonInputElement).getInputElement();
   receipts : Receipt[] = [];
   receipts$ : BehaviorSubject<Receipt[]> = new BehaviorSubject<Receipt[]>([]);
   selectedFile: File | null = null;
-  dateTimePresentation = "date";
   alertMsg = ""
   isAlertOpen = false;
   public alertButtons = [
@@ -76,40 +74,13 @@ export class ExpenseFormComponent implements OnInit {
       role: 'confirm',
     },
   ];
-  readonly priceMask: MaskitoOptions = {
-	  mask: /^\d+(\.\d{0,2})?$/, // digits and comma (as decimal separator)
-    preprocessors: [
-      ({elementState, data}) => {
-        const {value, selection} = elementState;
-        
-        const strValue =  value.toString();
-        return {
-          elementState: {
-            selection,
-            value: strValue.replace(/[^\d.]/g, ''),
-          },
-          data: data.replace(/[^\d.]/g, ''),
-        };
-      },
-    ],
-    postprocessors: [
-      ({value, selection}) => {
-        if (value.includes('.')) {
-          // Ensure 2 decimal places by padding zeroes if needed
-          const [integer, decimals] = value.split('.');
-          return {value:`${integer}.${(decimals || '').padEnd(2, '0')}`,selection: selection};
-        }else{
-          if(value.length <= 2){
-            return {value:`${value}.`.padEnd(2, '0'),selection: selection};
-          }else{
-            return {
-              value: value,
-              selection: selection,
-            };
-          }
-        }
-      },
-    ],
+
+  currencyOptions = {
+    align: 'left',
+    allowNegative: false,
+    allowZero: true,
+    precision: 2,
+    prefix : 'MYR '
   };
 
   constructor(
