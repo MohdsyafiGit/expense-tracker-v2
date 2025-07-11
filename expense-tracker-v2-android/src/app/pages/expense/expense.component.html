@@ -8,17 +8,17 @@
 <div class="home-filter-container" id="home-content">
   <div style="display: flex;flex-direction: column;align-items: center; margin: 12px;">
     <ion-button shape="round" color="tertiary" (click)="openFilterPicker()">
-      <span style="padding-top: 3px; margin-right: 8px;">{{ currentFilter.title}}</span>
+      <span style="padding-top: 3px; margin-right: 8px;">{{ currentFilter ? currentFilter.title : "No filter detected"}}</span>
       <ion-icon name="filter-outline"></ion-icon>
     </ion-button>
   </div>
   <div>
     <span class="filter-total">RM {{(currentFilterTotal() | number: '1.2-2')}} </span>
   </div>
-  @if (displayStartDate && displayEndDate) {
+  @if (currentFilter && displayStartDate && displayEndDate) {
     <div class="filter-date-container">
       <span class="filter-date">{{(displayStartDate | date : "d MMM, yyyy")}}</span>
-      @if (currentFilter.dateMode !== "today" && currentFilter.dateMode !== "yesterday") {
+      @if ( currentFilter.dateMode !== "today" && currentFilter.dateMode !== "yesterday") {
         <span class="filter-text-center">to</span>
         <span class="filter-date">{{(displayEndDate | date : "d MMM, yyyy" )}}</span>
       }
@@ -26,69 +26,71 @@
   }
 </div>
 
-<ion-card class="ion-margin" color="secondary">
-  <ion-accordion-group>
-    <ion-accordion>
-      <ion-item slot="header" color="secondary">
-        <h3 class="padding-title">Spendings:</h3>
-      </ion-item>
-      <div slot="content">
-        <app-expense-list [expenses$]="currentFilterExpenses$"></app-expense-list>
-      </div>
-    </ion-accordion>
-  </ion-accordion-group>
-</ion-card>
+@if(currentFilter){
+  <ion-card class="ion-margin" color="secondary">
+    <ion-accordion-group>
+      <ion-accordion>
+        <ion-item slot="header" color="secondary">
+          <h3 class="padding-title">Spendings:</h3>
+        </ion-item>
+        <div slot="content">
+          <app-expense-list [expenses$]="currentFilterExpenses$"></app-expense-list>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+  </ion-card>
 
-<ion-card class="ion-margin" color="secondary">
-  <ion-accordion-group>
-    <ion-accordion>
-      <ion-item slot="header" color="secondary">
-        <h3 class="padding-title">Total per accounts:</h3>
-      </ion-item>
-      <div slot="content" class="chart-container">
-        <div class="toggle-container">
-          <ion-label>View/Hide Chart</ion-label>
-          <ion-toggle aria-label="View/hide chart toggle" [checked]="isViewAccChart"
-            (ionChange)="handleAccChartToggleChange($event)"></ion-toggle>
-        </div>
-        @if(isViewAccChart){
-          <canvas id="total-per-account">{{ totalPerAccChart }}</canvas>
-        }
-      </div>
-      @for(item of ( totalPerAccountList$ | async);let i = $index;track i){
-        <div slot="content" class="account-total-container accordion-slot" appGradientBackground [percentage]="item.percentage">
-          <div>RM {{item.total | number: '1.2-2' }} ({{item.percentage | number: '1.2-2'}}%)</div>
-          <app-account-detail [accountId]="item.accId" [bankId]="item.bankId" size="normal"></app-account-detail>
-        </div>
-      }
-    </ion-accordion>
-  </ion-accordion-group>
-
-</ion-card>
-<ion-card class="ion-margin" color="secondary">
-  <ion-accordion-group>
-    <ion-accordion>
-      <ion-item slot="header" color="secondary">
-        <h3 class="padding-title">Total per category:</h3>
-      </ion-item>
-      <div slot="content" class="chart-container">
-        <div class="toggle-container">
-          <ion-label>View/Hide Chart</ion-label>
-          <ion-toggle aria-label="View/hide chart toggle" [checked]="isViewCatChart"
-            (ionChange)="handleCatChartToggleChange($event)"></ion-toggle>
-        </div>
-        @if(isViewCatChart){
-          <canvas id="total-per-cat">{{ totalPerCatChart }}</canvas>
-        }
-      </div>
-      @for(item of ( totalPerCatList$ | async);let i = $index;track i){
-        <div slot="content" class="account-total-container accordion-slot" appGradientBackground [percentage]="item.percentage">
-          <div class="ion-text-center">RM {{item.total | number: '1.2-2' }} ({{item.percentage | number: '1.2-2'}}%)
+  <ion-card class="ion-margin" color="secondary">
+    <ion-accordion-group>
+      <ion-accordion>
+        <ion-item slot="header" color="secondary">
+          <h3 class="padding-title">Total per accounts:</h3>
+        </ion-item>
+        <div slot="content" class="chart-container">
+          <div class="toggle-container">
+            <ion-label>View/Hide Chart</ion-label>
+            <ion-toggle aria-label="View/hide chart toggle" [checked]="isViewAccChart"
+              (ionChange)="handleAccChartToggleChange($event)"></ion-toggle>
           </div>
-          <app-category-icon [categoryId]="item.catId"></app-category-icon>
+          @if(isViewAccChart){
+            <canvas id="total-per-account">{{ totalPerAccChart }}</canvas>
+          }
         </div>
-      }
-    </ion-accordion>
-  </ion-accordion-group>
+        @for(item of ( totalPerAccountList$ | async);let i = $index;track i){
+          <div slot="content" class="account-total-container accordion-slot" appGradientBackground [percentage]="item.percentage">
+            <div>RM {{item.total | number: '1.2-2' }} ({{item.percentage | number: '1.2-2'}}%)</div>
+            <app-account-detail [accountId]="item.accId" [bankId]="item.bankId" size="normal"></app-account-detail>
+          </div>
+        }
+      </ion-accordion>
+    </ion-accordion-group>
 
-</ion-card>
+  </ion-card>
+  <ion-card class="ion-margin" color="secondary">
+    <ion-accordion-group>
+      <ion-accordion>
+        <ion-item slot="header" color="secondary">
+          <h3 class="padding-title">Total per category:</h3>
+        </ion-item>
+        <div slot="content" class="chart-container">
+          <div class="toggle-container">
+            <ion-label>View/Hide Chart</ion-label>
+            <ion-toggle aria-label="View/hide chart toggle" [checked]="isViewCatChart"
+              (ionChange)="handleCatChartToggleChange($event)"></ion-toggle>
+          </div>
+          @if(isViewCatChart){
+            <canvas id="total-per-cat">{{ totalPerCatChart }}</canvas>
+          }
+        </div>
+        @for(item of ( totalPerCatList$ | async);let i = $index;track i){
+          <div slot="content" class="account-total-container accordion-slot" appGradientBackground [percentage]="item.percentage">
+            <div class="ion-text-center">RM {{item.total | number: '1.2-2' }} ({{item.percentage | number: '1.2-2'}}%)
+            </div>
+            <app-category-icon [categoryId]="item.catId"></app-category-icon>
+          </div>
+        }
+      </ion-accordion>
+    </ion-accordion-group>
+
+  </ion-card>
+}

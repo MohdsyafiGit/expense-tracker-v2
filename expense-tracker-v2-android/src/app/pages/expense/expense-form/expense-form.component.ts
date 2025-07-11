@@ -12,7 +12,6 @@ import {  Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { returnUpBack, add, camera, document, eye, trash, saveOutline } from 'ionicons/icons';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { MaskitoElementPredicate, MaskitoOptions } from '@maskito/core';
 import { PdfJsViewerModule } from "ng2-pdfjs-viewer"; 
 import { Camera, CameraResultType, Photo } from '@capacitor/camera';
 import { v4 as UUID } from 'uuid';

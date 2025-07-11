@@ -46,6 +46,7 @@ export class FilterService {
         this.resetFiltersSub();
         this.filters = [];
         this.filters$.next([]);
+        this.currentFilter$.next(null);
       }else{
         this.resetFiltersSub();
         this.filtersSub = this.getFilters().subscribe();

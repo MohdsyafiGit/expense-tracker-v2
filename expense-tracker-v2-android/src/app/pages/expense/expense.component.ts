@@ -1,9 +1,10 @@
+import { Dialog } from '@capacitor/dialog';
 import { Component, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonButton, IonIcon, IonCard, IonAccordionGroup, IonAccordion, IonItem, IonLabel, IonToggle, ToggleCustomEvent, ModalController } from "@ionic/angular/standalone";
 import { Filter } from '../../models/filter.model';
 import { FilterService } from '../../services/filter.service';
-import { Observable, Subject, takeUntil, tap } from 'rxjs';
+import { debounceTime, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { addIcons } from 'ionicons';
 import { addOutline, filterOutline } from 'ionicons/icons';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
@@ -19,6 +20,7 @@ import { AccountDetailComponent } from '../../shared/account-detail/account-deta
 import { GradientBackgroundDirective } from '../../shared/gradient-background.directive';
 import { ExpenseFormComponent } from './expense-form/expense-form.component';
 import { FilterPickerComponent } from '../filter-picker/filter-picker.component';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-expense',
@@ -31,7 +33,7 @@ import { FilterPickerComponent } from '../filter-picker/filter-picker.component'
 })
 export class ExpenseComponent implements OnDestroy{
   destroy$ = new Subject<void>();
-  currentFilter = new Filter("Please Select");
+  currentFilter : Filter | null = new Filter("Please Select");
   currentFilterTotal = signal(0);
   displayStartDate = "";
   displayEndDate = "";
@@ -51,15 +53,26 @@ export class ExpenseComponent implements OnDestroy{
     private expenseService : ExpenseService,
     private categoryService : CategoryService,
     private bankService :BankService,
-    private modalCtrl : ModalController
+    private modalCtrl : ModalController,
+    private loadingService : LoadingService
   ){
     this.filterService.currentFilter$
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((filter)=>{
+    .pipe(
+      debounceTime(300),
+      takeUntil(this.destroy$))
+    .subscribe(async (filter)=>{
+      await this.loadingService.beginLoading();
       if(filter){
         this.currentFilter = filter;
         this.setObservables();
+      }else{
+        this.currentFilter = null;
+        const totalExpense = 0;
+        this.currentFilterTotal.set(totalExpense);
+        this.displayStartDate = "";
+        this.displayEndDate = "";
       }
+      await this.loadingService.endLoading();
     })
     addIcons({filterOutline,addOutline})
   }
@@ -71,40 +84,42 @@ export class ExpenseComponent implements OnDestroy{
 
   async setObservables(){
 
-    this.currentFilterExpenses$ = this.expenseService.getFilteredExpensesObservable(this.currentFilter).pipe(
-      tap(async (collections: GroupExpense[]) => {
-        if (collections && collections.length > 0) {
-          const totalExpense = collections.reduce((prev, curr) => prev + curr.total, 0);
-          this.currentFilterTotal.set(totalExpense);
-          this.displayStartDate = collections[collections.length - 1].dateTime;
-          this.displayEndDate = collections[0].dateTime;
-        }else{
-          const totalExpense = 0;
-          this.currentFilterTotal.set(totalExpense);
-          this.displayStartDate = "";
-          this.displayEndDate = "";
-        }
-      })
-    );
+    if(this.currentFilter)
+      this.currentFilterExpenses$ = this.expenseService.getFilteredExpensesObservable(this.currentFilter).pipe(
+        tap(async (collections: GroupExpense[]) => {
+          if (collections && collections.length > 0) {
+            const totalExpense = collections.reduce((prev, curr) => prev + curr.total, 0);
+            this.currentFilterTotal.set(totalExpense);
+            this.displayStartDate = collections[collections.length - 1].dateTime;
+            this.displayEndDate = collections[0].dateTime;
+          }else{
+            const totalExpense = 0;
+            this.currentFilterTotal.set(totalExpense);
+            this.displayStartDate = "";
+            this.displayEndDate = "";
+          }
+        })
+      );
 
-    this.totalPerAccountList$ = this.expenseService.getTotalPerAccountListObservable(this.currentFilter)
-    .pipe(
-      tap(async (list)=>{
-        this.totalPerAccountList = list;
+    if(this.currentFilter)
+      this.totalPerAccountList$ = this.expenseService.getTotalPerAccountListObservable(this.currentFilter)
+      .pipe(
+        tap(async (list)=>{
+          this.totalPerAccountList = list;
 
-        if(this.isViewAccChart && this.totalPerAccountList)
-          await this.loadAccChart(); 
-    }));
-
-
-    this.totalPerCatList$ = this.expenseService.getTotalPerCategoryListObservable(this.currentFilter)
-    .pipe(
-      tap(async (list)=>{
-        this.totalPerCatList = list;
-
-        if(this.isViewCatChart && this.totalPerCatList)
-          await this.LoadCatChart();
+          if(this.isViewAccChart && this.totalPerAccountList)
+            await this.loadAccChart(); 
       }));
+
+    if(this.currentFilter)
+      this.totalPerCatList$ = this.expenseService.getTotalPerCategoryListObservable(this.currentFilter)
+      .pipe(
+        tap(async (list)=>{
+          this.totalPerCatList = list;
+
+          if(this.isViewCatChart && this.totalPerCatList)
+            await this.LoadCatChart();
+        }));
   }
 
   async handleCatChartToggleChange(toggle: ToggleCustomEvent) {
@@ -191,33 +206,36 @@ export class ExpenseComponent implements OnDestroy{
     const chartExist = Chart.getChart(chartId);
     if (chartExist != undefined) chartExist.destroy();
 
-    return new Chart(chartId, {
-      type: 'pie',
+    if(this.currentFilter){
+      return new Chart(chartId, {
+        type: 'pie',
 
-      data: {
-        labels: data.map((item) => item.label),
-        datasets: [
-          {
-            label: 'Total Spent in MYR',
-            data: data.map((item) => item.totalSpent),
-            backgroundColor: data.map((item) => item.color),
-            hoverOffset: 4,
-          },
-        ],
-      },
-      options: {
-        plugins: {
-          legend: {
-            display: false,
-          },
-          tooltip: {
-            enabled: true,
-          },
+        data: {
+          labels: data.map((item) => item.label),
+          datasets: [
+            {
+              label: 'Total Spent in MYR',
+              data: data.map((item) => item.totalSpent),
+              backgroundColor: data.map((item) => item.color),
+              hoverOffset: 4,
+            },
+          ],
         },
-        borderColor: '#8DA9C4',
-        aspectRatio: 1.5,
-      },
-    });
+        options: {
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              enabled: true,
+            },
+          },
+          borderColor: '#8DA9C4',
+          aspectRatio: 1.5,
+        },
+      });
+    }
+    return null
   }
 
   async openNewExpenseModal(){
@@ -228,13 +246,22 @@ export class ExpenseComponent implements OnDestroy{
   }
 
   async openFilterPicker(){
-    const modal = await this.modalCtrl.create({
-      component : FilterPickerComponent,
-      componentProps : {
-        currentFilter : this.currentFilter
-      }
-    })
 
-    modal.present();
+    if(this.currentFilter){
+      const modal = await this.modalCtrl.create({
+        component : FilterPickerComponent,
+        componentProps : {
+          currentFilter : this.currentFilter
+        }
+      })
+
+      modal.present();
+    }else{
+      Dialog.alert({
+        title: "Error",
+        message : "No filter data detected"
+      })
+    }
+
   }
 }
